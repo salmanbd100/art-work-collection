@@ -1,11 +1,11 @@
 <div class="single-art-work">
   <nx-card>
-    <img [src]="imageUrl" alt="">
+    <img class="art-work-image" [src]="imageUrl" alt="">
     <nx-card-header>
-      <h3 nxHeadline="subsection-small" class="nx-margin-bottom-2m">{{artWork.name}}</h3>
+      <h3 >{{artWork.name}}</h3>
     </nx-card-header>
-    <p nxHeadline="subsection-xsmall" class="nx-margin-bottom-m">{{artWork.artist}}</p>
-    <p nxHeadline="subsection-xsmall">{{artWorkLocation}}</p>
-    <p nxCopytext="normal">{{artWork.materials}}</p>
+    <p class="subtitle">{{artWork.artist}}</p>
+    <p class="subtitle">{{artWorkLocation}}</p>
+    <p class="subtitle">{{artWork.materials}}</p>
   </nx-card>
 </div>

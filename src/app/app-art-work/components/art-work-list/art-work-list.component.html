@@ -1,15 +1,31 @@
-<h1>Art Collection</h1>
-<nx-formfield nxLabel="Fruits">
-  <nx-multi-select
-    placeholder="Choose options"
-    [options]="styleTitleOptions"
-    [(ngModel)]="modelWithFilter"
-    (ngModelChange)="onStyleFilterChange($event)"
-    [selectLabel]="selectLabel"
-    [selectValue]="selectValue"
-  ></nx-multi-select>
-</nx-formfield>
-
+<div nxLayout="grid" class="top-header">
+  <h1 class="main-title">Art Collection</h1>
+  <div nxRow>
+    <div nxCol="6">
+      <nx-formfield nxLabel="Filter">
+        <nx-multi-select
+          placeholder="Style"
+          [options]="styleTitleOptions"
+          [(ngModel)]="modelWithFilter"
+          (ngModelChange)="onStyleFilterChange($event)"
+          [selectLabel]="selectLabel"
+          [selectValue]="selectValue"
+        ></nx-multi-select>
+      </nx-formfield>
+    </div>
+    <div nxCol="6">
+      <nx-formfield nxLabel="Sort by">
+        <nx-dropdown
+          (selectionChange)="onChangeSortBy($event)">
+          <nx-dropdown-item
+            *ngFor="let option of sortOptions"
+            [nxValue]="option"
+          ></nx-dropdown-item>
+        </nx-dropdown>
+      </nx-formfield>
+    </div>
+  </div>
+</div>
 <div nxLayout="grid" *ngIf="!isDataLoading">
   <div nxRow *ngIf="artWorks.length">
     <ng-container *ngIf="!isFilter">

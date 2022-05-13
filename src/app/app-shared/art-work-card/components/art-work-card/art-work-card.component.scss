@@ -1,5 +1,15 @@
 .single-art-work {
   .nx-card {
     width: 100%;
+    min-height: 400px;
+  }
+  .art-work-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center center;
+  }
+  .subtitle {
+    margin: 5px;
   }
 }
