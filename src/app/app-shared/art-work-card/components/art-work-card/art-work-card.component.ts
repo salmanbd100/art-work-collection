@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ArtWorksInterface } from "../../../../app-art-work/interfaces/art-works.interface";
+import { ArtWorkCardService } from "../../services/art-work-card.service";
 
 @Component({
   selector: 'art-work-card',
@@ -8,14 +9,18 @@ import { ArtWorksInterface } from "../../../../app-art-work/interfaces/art-works
 })
 export class ArtWorkCardComponent implements OnInit {
   @Input() artWork: ArtWorksInterface = {};
+  @Input() iiifUrl: string = '';
+
+  imageUrl: string = '';
 
   artWorkLocation: string | undefined = '';
 
-  constructor() {
+  constructor(private artWorkCardService: ArtWorkCardService) {
   }
 
   ngOnInit(): void {
     this._formatArtWorkLocation();
+    this._getArtWorkImageUrl();
   }
 
   _formatArtWorkLocation() {
@@ -31,6 +36,14 @@ export class ArtWorkCardComponent implements OnInit {
       this.artWorkLocation = `${this.artWork.location} (${this.artWork.startDate} - ${this.artWork.endDate})`;
       return;
     }
+  }
+
+
+  _getArtWorkImageUrl() {
+    const orginalImageUrl = `${this.iiifUrl}/${this.artWork.imageId}/full/300,/0/default.jpg`
+    const defaultImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/3/32/Art_Institute_of_Chicago_logo.svg'
+    const isExistImage = this.artWorkCardService.IsExistArtWorkImage(orginalImageUrl);
+    this.imageUrl = isExistImage ? orginalImageUrl: defaultImageUrl;
   }
 
 }

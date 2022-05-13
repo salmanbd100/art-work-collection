@@ -9,7 +9,8 @@ import { ArtWorksInterface } from "../../interfaces/art-works.interface";
 })
 export class ArtWorkListComponent implements OnInit {
 
-  artWorks: ArtWorksInterface[] = []
+  artWorks: ArtWorksInterface[] = [];
+  iiifUrl: string = '';
 
   isDataLoading: boolean = false;
 
@@ -28,7 +29,7 @@ export class ArtWorkListComponent implements OnInit {
   getArtWorkList() {
     this.isDataLoading = true;
     const query = {
-      fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin',
+      fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id',
       page: this.page,
       limit: this.perPage,
     }
@@ -37,12 +38,12 @@ export class ArtWorkListComponent implements OnInit {
         this.count = response?.pagination?.total;
         this.page = response?.pagination?.current_page;
         this.perPage = response?.pagination?.limit;
-        console.log(response)
+        this.iiifUrl = response?.config?.iiif_url;
         this.artWorks = [];
         response.data.forEach((artData: any) => {
           this.artWorks.push({
             id: artData.id,
-            image: '',
+            imageId: artData?.image_id,
             name: artData.title,
             artist: artData.artist_title,
             location: artData.place_of_origin,

@@ -1,6 +1,6 @@
 export interface ArtWorksInterface {
   id?: string,
-  image?: string,
+  imageId?: string,
   name?: string,
   artist?: string,
   location?: string,
