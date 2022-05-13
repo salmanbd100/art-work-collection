@@ -1,12 +1,33 @@
 <h1>Art Collection</h1>
+<nx-formfield nxLabel="Fruits">
+  <nx-multi-select
+    placeholder="Choose options"
+    [options]="styleTitleOptions"
+    [(ngModel)]="modelWithFilter"
+    (ngModelChange)="onStyleFilterChange($event)"
+    [selectLabel]="selectLabel"
+    [selectValue]="selectValue"
+  ></nx-multi-select>
+</nx-formfield>
+
 <div nxLayout="grid" *ngIf="!isDataLoading">
   <div nxRow *ngIf="artWorks.length">
-    <div nxCol="3" *ngFor="let artWork of artWorks" class="single-art-work-wrapper">
-      <art-work-card
-        [artWork]="artWork"
-        [iiifUrl]="iiifUrl">
-      </art-work-card>
-    </div>
+    <ng-container *ngIf="!isFilter">
+      <div nxCol="3" *ngFor="let artWork of artWorks" class="single-art-work-wrapper">
+        <art-work-card
+          [artWork]="artWork"
+          [iiifUrl]="iiifUrl">
+        </art-work-card>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isFilter">
+      <div nxCol="3" *ngFor="let artWork of isFilteredArtWorks" class="single-art-work-wrapper">
+        <art-work-card
+          [artWork]="artWork"
+          [iiifUrl]="iiifUrl">
+        </art-work-card>
+      </div>
+    </ng-container>
   </div>
 </div>
 

@@ -7,4 +7,10 @@ export interface ArtWorksInterface {
   startDate?: string,
   endDate?: string,
   materials?: string[],
+  styleTitles?: string[],
+}
+
+export interface SelectTitleOptionInterface {
+  styleTitle: string;
+  numberOfItem: number;
 }

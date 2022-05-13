@@ -9,6 +9,9 @@ import { ArtWorkCardModule } from "../app-shared/art-work-card/art-work-card.mod
 import { NxGridModule } from "@aposin/ng-aquila/grid";
 import { NxPaginationModule } from "@aposin/ng-aquila/pagination";
 import { NxSpinnerModule } from "@aposin/ng-aquila/spinner";
+import { NxFormfieldModule } from "@aposin/ng-aquila/formfield";
+import { NxDropdownModule } from "@aposin/ng-aquila/dropdown";
+import { FormsModule } from "@angular/forms";
 
 
 
@@ -18,13 +21,16 @@ import { NxSpinnerModule } from "@aposin/ng-aquila/spinner";
     ArtWorkDefaultComponent,
     ArtWorkDetailComponent
   ],
-  imports: [
-    CommonModule,
-    AppArtWorkRoutingModule,
-    ArtWorkCardModule,
-    NxGridModule,
-    NxPaginationModule,
-    NxSpinnerModule,
-  ]
+    imports: [
+        CommonModule,
+        AppArtWorkRoutingModule,
+        ArtWorkCardModule,
+        NxGridModule,
+        NxPaginationModule,
+        NxSpinnerModule,
+        NxFormfieldModule,
+        NxDropdownModule,
+        FormsModule,
+    ]
 })
 export class AppArtWorkModule { }
