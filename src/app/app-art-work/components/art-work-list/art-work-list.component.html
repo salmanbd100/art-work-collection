@@ -1,1 +1,9 @@
-<p>art-work-list works!</p>
+<h1>Art Collection</h1>
+<div nxLayout="grid">
+  <div nxRow *ngIf="artWorks.length">
+    <div nxCol="3" *ngFor="let artWork of artWorks" class="single-art-work-wrapper">
+      <art-work-card [artWork]="artWork"></art-work-card>
+    </div>
+  </div>
+</div>
+

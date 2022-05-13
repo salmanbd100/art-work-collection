@@ -7,14 +7,17 @@ const httpOptions = {
     'Content-Type': 'application/json'
   })
 };
+
 @Injectable({
   providedIn: 'root'
 })
 export class ArtWorkService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
-  GetArtWorkList() {
-    const url = environment.artWork;
+  GetArtWorkList(params: any) {
+    const url = environment.artWork + '/artworks';
+    return this.httpClient.get(url, { params: { ...params } })
   }
 }

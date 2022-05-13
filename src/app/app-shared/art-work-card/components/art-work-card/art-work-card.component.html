@@ -1,1 +1,10 @@
-<p>art-work-card works!</p>
+<div class="single-art-work">
+  <nx-card>
+    <nx-card-header>
+      <h3 nxHeadline="subsection-small" class="nx-margin-bottom-2m">{{artWork.name}}</h3>
+    </nx-card-header>
+    <p nxHeadline="subsection-xsmall" class="nx-margin-bottom-m">{{artWork.artist}}</p>
+    <p nxHeadline="subsection-xsmall">{{artWorkLocation}}</p>
+    <p nxCopytext="normal">{{artWork.materials}}</p>
+  </nx-card>
+</div>
