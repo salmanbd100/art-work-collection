@@ -1,3 +1,16 @@
 .single-art-work-wrapper {
   margin-bottom: 24px;
 }
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 32px;
+}
+
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+}

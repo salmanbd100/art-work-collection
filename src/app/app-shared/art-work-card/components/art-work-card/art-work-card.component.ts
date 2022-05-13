@@ -16,8 +16,6 @@ export class ArtWorkCardComponent implements OnInit {
 
   ngOnInit(): void {
     this._formatArtWorkLocation();
-    console.log(this.artWork)
-    console.log(this.artWorkLocation)
   }
 
   _formatArtWorkLocation() {

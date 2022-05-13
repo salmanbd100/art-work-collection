@@ -7,6 +7,8 @@ import { ArtWorkDefaultComponent } from './components/art-work-default/art-work-
 import { ArtWorkDetailComponent } from './components/art-work-detail/art-work-detail.component';
 import { ArtWorkCardModule } from "../app-shared/art-work-card/art-work-card.module";
 import { NxGridModule } from "@aposin/ng-aquila/grid";
+import { NxPaginationModule } from "@aposin/ng-aquila/pagination";
+import { NxSpinnerModule } from "@aposin/ng-aquila/spinner";
 
 
 
@@ -21,6 +23,8 @@ import { NxGridModule } from "@aposin/ng-aquila/grid";
     AppArtWorkRoutingModule,
     ArtWorkCardModule,
     NxGridModule,
+    NxPaginationModule,
+    NxSpinnerModule,
   ]
 })
 export class AppArtWorkModule { }

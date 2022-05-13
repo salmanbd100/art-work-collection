@@ -11,6 +11,13 @@ export class ArtWorkListComponent implements OnInit {
 
   artWorks: ArtWorksInterface[] = []
 
+  isDataLoading: boolean = false;
+
+  // pagination variable
+  count: number = 210;
+  page: number = 1;
+  perPage: number = 8;
+
   constructor(private artWorkService: ArtWorkService) {
   }
 
@@ -19,13 +26,19 @@ export class ArtWorkListComponent implements OnInit {
   }
 
   getArtWorkList() {
+    this.isDataLoading = true;
     const query = {
       fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin',
-      page: 1,
-      limit: 8,
+      page: this.page,
+      limit: this.perPage,
     }
     this.artWorkService.GetArtWorkList(query).subscribe((response: any) => {
       if (response?.data?.length) {
+        this.count = response?.pagination?.total;
+        this.page = response?.pagination?.current_page;
+        this.perPage = response?.pagination?.limit;
+        console.log(response)
+        this.artWorks = [];
         response.data.forEach((artData: any) => {
           this.artWorks.push({
             id: artData.id,
@@ -38,8 +51,25 @@ export class ArtWorkListComponent implements OnInit {
             materials: artData.material_titles,
           })
         })
+        this.isDataLoading = false;
       }
     })
+  }
+
+
+  prevPage() {
+    this.page--;
+    this.getArtWorkList();
+  }
+
+  nextPage() {
+    this.page++;
+    this.getArtWorkList();
+  }
+
+  goToPage(n: number) {
+    this.page = n;
+    this.getArtWorkList();
   }
 
 }
