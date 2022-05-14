@@ -166,17 +166,6 @@ export class ArtWorkListComponent implements OnInit {
         const arr = filterKeys.filter(x => item.styleTitles.includes(x));
         return arr.length > 0;
       })
-      // this.artWorks.forEach((artWork: ArtWorksInterface) => {
-      //   if (artWork.styleTitles?.length !== 0) {
-      //     artWork.styleTitles?.forEach((key: string) => {
-      //       $event.forEach((eventKey: string) => {
-      //         if (key === eventKey) {
-      //           this.isFilteredArtWorks.push(artWork);
-      //         }
-      //       })
-      //     })
-      //   }
-      // })
     }
   }
 
