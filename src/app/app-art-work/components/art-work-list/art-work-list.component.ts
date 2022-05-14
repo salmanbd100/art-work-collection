@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ArtWorkService } from "../../services/art-work.service";
 import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/art-works.interface";
-import { NxDropdownItemChange } from "@aposin/ng-aquila/dropdown";
+import { SortUtilityService } from "../../services/sort-utility.service";
 
 @Component({
   selector: 'app-art-work-list',
@@ -11,25 +11,28 @@ import { NxDropdownItemChange } from "@aposin/ng-aquila/dropdown";
 export class ArtWorkListComponent implements OnInit {
 
   artWorks: ArtWorksInterface[] = [];
+  isDataLoading: boolean = false;
+
+  // Image root url
   iiifUrl: string = '';
 
+  // Sort
   sortBy: string = '';
   sortOptions = ['Name', 'Artist', 'Date'];
 
+  // Filter
   modelWithFilter: any[] = [];
   styleTitleOptions: SelectTitleOptionInterface[] = [];
-
   isFilter: boolean = false;
   isFilteredArtWorks: ArtWorksInterface[] = [];
-
-  isDataLoading: boolean = false;
 
   // pagination variable
   count: number = 210;
   page: number = 1;
   perPage: number = 8;
 
-  constructor(private artWorkService: ArtWorkService) {
+  constructor(private artWorkService: ArtWorkService,
+              private sortUtilityService: SortUtilityService) {
   }
 
   ngOnInit(): void {
@@ -54,46 +57,13 @@ export class ArtWorkListComponent implements OnInit {
 
   private _sortArtWorkerData() {
     if (this.sortBy === 'ARTIST') {
-      this.artWorks.sort((a: ArtWorksInterface, b: ArtWorksInterface) => {
-        // @ts-ignore
-        if (a?.artist?.toLowerCase() < b?.artist?.toLowerCase()) {
-          return -1;
-        } else { // @ts-ignore
-          if (a?.artist?.toLowerCase() > b?.artist?.toLowerCase()) {
-            return 1;
-          } else {
-            return 0
-          }
-        }
-      })
+      this.artWorks.sort(this.sortUtilityService.SortByArtist)
     }
     if (this.sortBy === 'NAME') {
-      this.artWorks.sort((a: ArtWorksInterface, b: ArtWorksInterface) => {
-        // @ts-ignore
-        if (a?.name?.toLowerCase() < b?.name?.toLowerCase()) {
-          return -1;
-        } else { // @ts-ignore
-          if (a?.name?.toLowerCase() > b?.name?.toLowerCase()) {
-            return 1;
-          } else {
-            return 0
-          }
-        }
-      })
+      this.artWorks.sort(this.sortUtilityService.SortByName)
     }
     if (this.sortBy === 'DATE') {
-      this.artWorks.sort((a: ArtWorksInterface, b: ArtWorksInterface) => {
-        // @ts-ignore
-        if (a?.startDate < b?.startDate) {
-          return -1;
-        } else { // @ts-ignore
-          if (a?.startDate > b?.startDate) {
-            return 1;
-          } else {
-            return 0
-          }
-        }
-      })
+      this.artWorks.sort(this.sortUtilityService.SortByDate)
     }
   }
 
@@ -202,7 +172,6 @@ export class ArtWorkListComponent implements OnInit {
       })
     }
   }
-
 
   onChangeSortBy($event: any) {
     this._clearStyleFilter();

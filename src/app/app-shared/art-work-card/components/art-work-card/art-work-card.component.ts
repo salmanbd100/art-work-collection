@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ArtWorksInterface } from "../../../../app-art-work/interfaces/art-works.interface";
 import { ArtWorkCardService } from "../../services/art-work-card.service";
+import { environment } from "@environment";
 
 @Component({
   selector: 'art-work-card',
@@ -41,9 +42,12 @@ export class ArtWorkCardComponent implements OnInit {
 
   _getArtWorkImageUrl() {
     const orginalImageUrl = `${this.iiifUrl}/${this.artWork.imageId}/full/300,/0/default.jpg`
-    const defaultImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/3/32/Art_Institute_of_Chicago_logo.svg'
+
     const isExistImage = this.artWorkCardService.IsExistArtWorkImage(orginalImageUrl);
-    this.imageUrl = isExistImage ? orginalImageUrl: defaultImageUrl;
+    this.imageUrl = isExistImage ? orginalImageUrl: environment.defaultImageUrl;
   }
 
+  onImageLoadError($event: ErrorEvent) {
+    this.imageUrl = environment.defaultImageUrl;
+  }
 }

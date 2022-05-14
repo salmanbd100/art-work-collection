@@ -1,6 +1,6 @@
 <div class="single-art-work">
   <nx-card>
-    <img class="art-work-image" [src]="imageUrl" alt="">
+    <img class="art-work-image" [src]="imageUrl" (error)="onImageLoadError($event)" alt="">
     <nx-card-header>
       <h3 >{{artWork.name}}</h3>
     </nx-card-header>
