@@ -124,6 +124,7 @@ export class ArtWorkListComponent implements OnInit {
         styleTitles = [...styleTitles, ...artWork.styleTitles]
       }
     })
+
     let keys: string[] = [];
     let titleDictionary: any = {};
     styleTitles.forEach((title: string) => {
@@ -134,6 +135,7 @@ export class ArtWorkListComponent implements OnInit {
         keys.push(title);
       }
     })
+
     keys.forEach((key: string) => {
       this.styleTitleOptions.push(
         {
@@ -152,24 +154,29 @@ export class ArtWorkListComponent implements OnInit {
     return option.styleTitle;
   }
 
-  onStyleFilterChange($event: string[]) {
+  onStyleFilterChange(filterKeys: string[]) {
     this.isFilteredArtWorks = [];
     this.sortBy = '';
-    if ($event.length === 0) {
+    if (filterKeys.length === 0) {
       this.isFilteredArtWorks = this.artWorks;
     } else {
       this.isFilter = true;
-      this.artWorks.forEach((artWork: ArtWorksInterface) => {
-        if (artWork.styleTitles?.length !== 0) {
-          artWork.styleTitles?.forEach((key: string) => {
-            $event.forEach((eventKey: string) => {
-              if (key === eventKey) {
-                this.isFilteredArtWorks.push(artWork);
-              }
-            })
-          })
-        }
+      this.isFilteredArtWorks = this.artWorks.filter((item: ArtWorksInterface) => {
+        // @ts-ignore
+        const arr = filterKeys.filter(x => item.styleTitles.includes(x));
+        return arr.length > 0;
       })
+      // this.artWorks.forEach((artWork: ArtWorksInterface) => {
+      //   if (artWork.styleTitles?.length !== 0) {
+      //     artWork.styleTitles?.forEach((key: string) => {
+      //       $event.forEach((eventKey: string) => {
+      //         if (key === eventKey) {
+      //           this.isFilteredArtWorks.push(artWork);
+      //         }
+      //       })
+      //     })
+      //   }
+      // })
     }
   }
 
