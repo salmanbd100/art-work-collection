@@ -6,7 +6,6 @@ import { NxHeadlineModule } from "@aposin/ng-aquila/headline";
 import { NxCopytextModule } from "@aposin/ng-aquila/copytext";
 
 
-
 @NgModule({
   declarations: [
     ArtWorkCardComponent
@@ -21,4 +20,5 @@ import { NxCopytextModule } from "@aposin/ng-aquila/copytext";
     NxCopytextModule
   ]
 })
-export class ArtWorkCardModule { }
+export class ArtWorkCardModule {
+}

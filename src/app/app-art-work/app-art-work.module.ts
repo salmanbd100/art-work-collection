@@ -14,23 +14,23 @@ import { NxDropdownModule } from "@aposin/ng-aquila/dropdown";
 import { FormsModule } from "@angular/forms";
 
 
-
 @NgModule({
   declarations: [
     ArtWorkListComponent,
     ArtWorkDefaultComponent,
     ArtWorkDetailComponent
   ],
-    imports: [
-        CommonModule,
-        AppArtWorkRoutingModule,
-        ArtWorkCardModule,
-        NxGridModule,
-        NxPaginationModule,
-        NxSpinnerModule,
-        NxFormfieldModule,
-        NxDropdownModule,
-        FormsModule,
-    ]
+  imports: [
+    CommonModule,
+    AppArtWorkRoutingModule,
+    ArtWorkCardModule,
+    NxGridModule,
+    NxPaginationModule,
+    NxSpinnerModule,
+    NxFormfieldModule,
+    NxDropdownModule,
+    FormsModule,
+  ]
 })
-export class AppArtWorkModule { }
+export class AppArtWorkModule {
+}

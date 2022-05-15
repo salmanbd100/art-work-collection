@@ -39,7 +39,6 @@ export class ArtWorkCardComponent implements OnInit {
     }
   }
 
-
   _getArtWorkImageUrl() {
     const orginalImageUrl = `${this.iiifUrl}/${this.artWork.imageId}/full/300,/0/default.jpg`
 
