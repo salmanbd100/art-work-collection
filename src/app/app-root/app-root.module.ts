@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AppRootRoutingModule } from './app-root-routing.module';
 import { RootDefaultComponent } from './components/root-default/root-default.component';
 import { BrowserModule } from "@angular/platform-browser";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 
@@ -22,7 +22,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
   bootstrap: [
     RootDefaultComponent
   ],
-  providers: [HttpClient]
+  providers: []
 })
 export class AppRootModule {
 }
