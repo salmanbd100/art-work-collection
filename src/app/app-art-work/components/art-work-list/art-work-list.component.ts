@@ -4,9 +4,10 @@ import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/
 import { SortUtilityService } from "../../services/sort-utility.service";
 
 @Component({
-  selector: 'app-art-work-list',
-  templateUrl: './art-work-list.component.html',
-  styleUrls: ['./art-work-list.component.scss']
+    selector: 'app-art-work-list',
+    templateUrl: './art-work-list.component.html',
+    styleUrls: ['./art-work-list.component.scss'],
+    standalone: false
 })
 export class ArtWorkListComponent implements OnInit {
 

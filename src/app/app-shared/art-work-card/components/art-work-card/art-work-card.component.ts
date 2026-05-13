@@ -4,9 +4,10 @@ import { ArtWorkCardService } from "../../services/art-work-card.service";
 import { environment } from "@environment";
 
 @Component({
-  selector: 'art-work-card',
-  templateUrl: './art-work-card.component.html',
-  styleUrls: ['./art-work-card.component.scss']
+    selector: 'art-work-card',
+    templateUrl: './art-work-card.component.html',
+    styleUrls: ['./art-work-card.component.scss'],
+    standalone: false
 })
 export class ArtWorkCardComponent implements OnInit {
   @Input() artWork: ArtWorksInterface = {};
