@@ -11,9 +11,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./app-art-work/components/art-work-list/art-work-list.component').then(
-            (m) => m.ArtWorkListComponent,
-          ),
+          import('./features/artworks/list/artworks-list.page').then((m) => m.ArtworksListPage),
       },
     ],
   },

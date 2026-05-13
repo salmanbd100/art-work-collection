@@ -39,8 +39,8 @@ export class ArtworksStore {
   readonly perPage = signal(8);
 
   private artworksResource = rxResource({
-    request: () => ({ page: this.page(), perPage: this.perPage() }),
-    loader: ({ request }) => this.api.list(request),
+    params: () => ({ page: this.page(), perPage: this.perPage() }),
+    stream: ({ params }) => this.api.list(params),
   });
 
   readonly isLoading = this.artworksResource.isLoading;

@@ -1,0 +1,52 @@
+<div class="top-header">
+  <h1 class="main-title">Art Collection</h1>
+  <div class="controls-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Filter by Style</mat-label>
+      <mat-select
+        multiple
+        [(ngModel)]="selectedStyles"
+        (ngModelChange)="onStyleFilterChange($event)"
+      >
+        @for (facet of store.styleFacets(); track facet.styleTitle) {
+        <mat-option [value]="facet.styleTitle">
+          {{ facet.styleTitle }} ({{ facet.count }})
+        </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Sort by</mat-label>
+      <mat-select (selectionChange)="onChangeSortBy($event)">
+        @for (option of sortOptions; track option) {
+        <mat-option [value]="option">{{ option | titlecase }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+
+@if (!store.isLoading() && store.filteredArtworks().length) {
+<div class="artwork-grid">
+  @for (artWork of store.filteredArtworks(); track artWork.id) {
+  <app-art-work-card [artWork]="artWork" [iiifUrl]="store.iiifUrl()"></app-art-work-card>
+  }
+</div>
+}
+
+<div class="pagination-wrapper">
+  <mat-paginator
+    [length]="store.totalCount()"
+    [pageIndex]="store.page() - 1"
+    [pageSize]="store.perPage()"
+    [pageSizeOptions]="[8, 16, 24]"
+    (page)="onPageChange($event)"
+  ></mat-paginator>
+</div>
+
+@if (store.isLoading()) {
+<div class="spinner-wrapper">
+  <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+</div>
+}

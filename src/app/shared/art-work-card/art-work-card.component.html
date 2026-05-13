@@ -1,0 +1,17 @@
+<mat-card class="single-art-work">
+  <img
+    mat-card-image
+    class="art-work-image"
+    [src]="imageUrl()"
+    (error)="$event.target.src = defaultImageUrl"
+    [alt]="artWork().title"
+  />
+  <mat-card-header>
+    <mat-card-title>{{ artWork().title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="subtitle">{{ artWork().artist }}</p>
+    <p class="subtitle">{{ location() }}</p>
+    <p class="subtitle">{{ artWork().materials.join(', ') }}</p>
+  </mat-card-content>
+</mat-card>
