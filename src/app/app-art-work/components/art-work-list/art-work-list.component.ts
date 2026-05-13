@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ArtWorkService } from "../../services/art-work.service";
 import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/art-works.interface";
 import { SortUtilityService } from "../../services/sort-utility.service";
+import { PageEvent } from "@angular/material/paginator";
+import { MatSelectChange } from "@angular/material/select";
 
 @Component({
     selector: 'app-art-work-list',
@@ -98,7 +100,6 @@ export class ArtWorkListComponent implements OnInit {
     this.styleTitleOptions = [];
   }
 
-
   prevPage() {
     this.page--;
     this.getArtWorkList();
@@ -113,6 +114,13 @@ export class ArtWorkListComponent implements OnInit {
 
   goToPage(n: number) {
     this.page = n;
+    this.getArtWorkList();
+    this._clearStyleFilter();
+  }
+
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.perPage = event.pageSize;
     this.getArtWorkList();
     this._clearStyleFilter();
   }
@@ -147,14 +155,6 @@ export class ArtWorkListComponent implements OnInit {
     })
   }
 
-  selectLabel(option: SelectTitleOptionInterface): string {
-    return `${option.styleTitle} (${option.numberOfItem})`;
-  }
-
-  selectValue(option: SelectTitleOptionInterface): string {
-    return option.styleTitle;
-  }
-
   onStyleFilterChange(filterKeys: string[]) {
     this.isFilteredArtWorks = [];
     this.sortBy = '';
@@ -163,16 +163,15 @@ export class ArtWorkListComponent implements OnInit {
     } else {
       this.isFilter = true;
       this.isFilteredArtWorks = this.artWorks.filter((item: ArtWorksInterface) => {
-        // @ts-ignore
-        const arr = filterKeys.filter(x => item.styleTitles.includes(x));
+        const arr = filterKeys.filter(x => item.styleTitles?.includes(x));
         return arr.length > 0;
       })
     }
   }
 
-  onChangeSortBy($event: any) {
+  onChangeSortBy(event: MatSelectChange) {
     this._clearStyleFilter();
-    this.sortBy = $event.value.toUpperCase();
+    this.sortBy = (event.value as string).toUpperCase();
     this._sortArtWorkerData();
   }
 }

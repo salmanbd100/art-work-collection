@@ -5,11 +5,10 @@ import { AppArtWorkRoutingModule } from './app-art-work-routing.module';
 import { ArtWorkListComponent } from './components/art-work-list/art-work-list.component';
 import { ArtWorkDefaultComponent } from './components/art-work-default/art-work-default.component';
 import { ArtWorkCardModule } from "../app-shared/art-work-card/art-work-card.module";
-import { NxGridModule } from "@aposin/ng-aquila/grid";
-import { NxPaginationModule } from "@aposin/ng-aquila/pagination";
-import { NxSpinnerModule } from "@aposin/ng-aquila/spinner";
-import { NxFormfieldModule } from "@aposin/ng-aquila/formfield";
-import { NxDropdownModule } from "@aposin/ng-aquila/dropdown";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelectModule } from "@angular/material/select";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { FormsModule } from "@angular/forms";
 
 
@@ -22,11 +21,10 @@ import { FormsModule } from "@angular/forms";
     CommonModule,
     AppArtWorkRoutingModule,
     ArtWorkCardModule,
-    NxGridModule,
-    NxPaginationModule,
-    NxSpinnerModule,
-    NxFormfieldModule,
-    NxDropdownModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
     FormsModule,
   ]
 })

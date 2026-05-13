@@ -15,15 +15,15 @@
   "packageManager": "pnpm@9.15.0",
   "dependencies": {
     "@angular/animations": "^20.3.21",
-    "@angular/cdk": "^13.0.0",
+    "@angular/cdk": "20",
     "@angular/common": "^20.3.21",
     "@angular/compiler": "^20.3.21",
     "@angular/core": "^20.3.21",
     "@angular/forms": "^20.3.21",
+    "@angular/material": "20",
     "@angular/platform-browser": "^20.3.21",
     "@angular/platform-browser-dynamic": "^20.3.21",
     "@angular/router": "^20.3.21",
-    "@aposin/ng-aquila": "^13.4.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"

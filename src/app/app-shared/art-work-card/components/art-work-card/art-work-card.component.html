@@ -1,11 +1,11 @@
-<div class="single-art-work">
-  <nx-card>
-    <img class="art-work-image" [src]="imageUrl" (error)="onImageLoadError($event)" alt="">
-    <nx-card-header>
-      <h3 >{{artWork.name}}</h3>
-    </nx-card-header>
-    <p class="subtitle">{{artWork.artist}}</p>
-    <p class="subtitle">{{artWorkLocation}}</p>
-    <p class="subtitle">{{artWork.materials}}</p>
-  </nx-card>
-</div>
+<mat-card class="single-art-work">
+  <img mat-card-image class="art-work-image" [src]="imageUrl" (error)="onImageLoadError($event)" [alt]="artWork.name || ''">
+  <mat-card-header>
+    <mat-card-title>{{ artWork.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="subtitle">{{ artWork.artist }}</p>
+    <p class="subtitle">{{ artWorkLocation }}</p>
+    <p class="subtitle">{{ artWork.materials }}</p>
+  </mat-card-content>
+</mat-card>

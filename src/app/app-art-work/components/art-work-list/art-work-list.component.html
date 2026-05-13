@@ -1,65 +1,51 @@
-<div nxLayout="grid" class="top-header">
+<div class="top-header">
   <h1 class="main-title">Art Collection</h1>
-  <div nxRow>
-    <div nxCol="6">
-      <nx-formfield nxLabel="Filter">
-        <nx-multi-select
-          placeholder="Style"
-          [options]="styleTitleOptions"
-          [(ngModel)]="modelWithFilter"
-          (ngModelChange)="onStyleFilterChange($event)"
-          [selectLabel]="selectLabel"
-          [selectValue]="selectValue"
-        ></nx-multi-select>
-      </nx-formfield>
-    </div>
-    <div nxCol="6">
-      <nx-formfield nxLabel="Sort by">
-        <nx-dropdown
-          (selectionChange)="onChangeSortBy($event)">
-          <nx-dropdown-item
-            *ngFor="let option of sortOptions"
-            [nxValue]="option"
-          ></nx-dropdown-item>
-        </nx-dropdown>
-      </nx-formfield>
-    </div>
+  <div class="controls-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Filter by Style</mat-label>
+      <mat-select multiple [(ngModel)]="modelWithFilter" (ngModelChange)="onStyleFilterChange($event)">
+        <mat-option *ngFor="let option of styleTitleOptions" [value]="option.styleTitle">
+          {{ option.styleTitle }} ({{ option.numberOfItem }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Sort by</mat-label>
+      <mat-select (selectionChange)="onChangeSortBy($event)">
+        <mat-option *ngFor="let option of sortOptions" [value]="option">{{ option }}</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </div>
-<div nxLayout="grid" *ngIf="!isDataLoading">
-  <div nxRow *ngIf="artWorks.length">
-    <ng-container *ngIf="!isFilter">
-      <div nxCol="3" *ngFor="let artWork of artWorks" class="single-art-work-wrapper">
-        <art-work-card
-          [artWork]="artWork"
-          [iiifUrl]="iiifUrl">
-        </art-work-card>
-      </div>
-    </ng-container>
-    <ng-container *ngIf="isFilter">
-      <div nxCol="3" *ngFor="let artWork of isFilteredArtWorks" class="single-art-work-wrapper">
-        <art-work-card
-          [artWork]="artWork"
-          [iiifUrl]="iiifUrl">
-        </art-work-card>
-      </div>
-    </ng-container>
-  </div>
+
+<div class="artwork-grid" *ngIf="!isDataLoading && artWorks.length">
+  <ng-container *ngIf="!isFilter">
+    <art-work-card
+      *ngFor="let artWork of artWorks"
+      [artWork]="artWork"
+      [iiifUrl]="iiifUrl">
+    </art-work-card>
+  </ng-container>
+  <ng-container *ngIf="isFilter">
+    <art-work-card
+      *ngFor="let artWork of isFilteredArtWorks"
+      [artWork]="artWork"
+      [iiifUrl]="iiifUrl">
+    </art-work-card>
+  </ng-container>
 </div>
 
 <div class="pagination-wrapper">
-  <nx-pagination
-    [nxCount]="count"
-    [nxPage]="page"
-    [nxPerPage]="perPage"
-    nxType="advanced"
-    (nxGoPrev)="prevPage()"
-    (nxGoNext)="nextPage()"
-    (nxGoPage)="goToPage($event)"
-  >
-  </nx-pagination>
+  <mat-paginator
+    [length]="count"
+    [pageIndex]="page - 1"
+    [pageSize]="perPage"
+    [pageSizeOptions]="[8, 16, 24]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 </div>
 
 <div class="spinner-wrapper" *ngIf="isDataLoading">
-  <nx-spinner nxSize="large"></nx-spinner>
+  <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
 </div>
