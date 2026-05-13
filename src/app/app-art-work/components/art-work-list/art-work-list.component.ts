@@ -20,20 +20,16 @@ export class ArtWorkListComponent implements OnInit {
   artWorks: ArtWorksInterface[] = [];
   isDataLoading: boolean = false;
 
-  // Image root url
   iiifUrl: string = '';
 
-  // Sort
   sortBy: string = '';
   sortOptions = ['Name', 'Artist', 'Date'];
 
-  // Filter
-  modelWithFilter: any[] = [];
+  modelWithFilter: string[] = [];
   styleTitleOptions: SelectTitleOptionInterface[] = [];
   isFilter: boolean = false;
   isFilteredArtWorks: ArtWorksInterface[] = [];
 
-  // pagination variable
   count: number = 210;
   page: number = 1;
   perPage: number = 8;
@@ -46,31 +42,30 @@ export class ArtWorkListComponent implements OnInit {
     this.getArtWorkList();
   }
 
-  private _formatArtWorkData(artWorkData: any) {
-    artWorkData.forEach((artData: any) => {
-      this.artWorks.push({
-        id: artData.id,
-        imageId: artData?.image_id,
-        name: artData.title,
-        artist: artData.artist_title,
-        location: artData.place_of_origin,
-        startDate: artData.date_start,
-        endDate: artData.date_end,
-        materials: artData.material_titles,
-        styleTitles: artData.style_titles,
-      })
-    })
+  private _formatArtWorkData(rawData: { id: string; image_id: string | null; title: string | null; artist_title: string | null; place_of_origin: string | null; date_start: string | null; date_end: string | null; material_titles: string[] | null; style_titles: string[] | null }[]) {
+    rawData.forEach((artData) => {
+      const item: ArtWorksInterface = { id: artData.id };
+      if (artData.image_id !== null) item.imageId = artData.image_id;
+      if (artData.title !== null) item.name = artData.title;
+      if (artData.artist_title !== null) item.artist = artData.artist_title;
+      if (artData.place_of_origin !== null) item.location = artData.place_of_origin;
+      if (artData.date_start !== null) item.startDate = artData.date_start;
+      if (artData.date_end !== null) item.endDate = artData.date_end;
+      if (artData.material_titles !== null) item.materials = artData.material_titles;
+      if (artData.style_titles !== null) item.styleTitles = artData.style_titles;
+      this.artWorks.push(item);
+    });
   }
 
   private _sortArtWorkerData() {
     if (this.sortBy === 'ARTIST') {
-      this.artWorks.sort(this.sortUtilityService.SortByArtist)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByArtist(a, b));
     }
     if (this.sortBy === 'NAME') {
-      this.artWorks.sort(this.sortUtilityService.SortByName)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByName(a, b));
     }
     if (this.sortBy === 'DATE') {
-      this.artWorks.sort(this.sortUtilityService.SortByDate)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByDate(a, b));
     }
   }
 
@@ -80,13 +75,13 @@ export class ArtWorkListComponent implements OnInit {
       fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id,style_titles',
       page: this.page,
       limit: this.perPage,
-    }
-    this.artWorkService.GetArtWorkList(query).subscribe((response: any) => {
+    };
+    this.artWorkService.GetArtWorkList(query).subscribe((response) => {
       if (response?.data?.length) {
-        this.count = response?.pagination?.total;
-        this.page = response?.pagination?.current_page;
-        this.perPage = response?.pagination?.limit;
-        this.iiifUrl = response?.config?.iiif_url;
+        this.count = response.pagination.total;
+        this.page = response.pagination.current_page;
+        this.perPage = response.pagination.limit;
+        this.iiifUrl = response.config.iiif_url;
         this.artWorks = [];
         this._formatArtWorkData(response.data);
         this._formatStyleTitleFilter();
@@ -95,7 +90,7 @@ export class ArtWorkListComponent implements OnInit {
         }
         this.isDataLoading = false;
       }
-    })
+    });
   }
 
   private _clearStyleFilter() {
@@ -131,32 +126,30 @@ export class ArtWorkListComponent implements OnInit {
 
   private _formatStyleTitleFilter() {
     this.styleTitleOptions = [];
-    let styleTitles: string[] = []
+    let styleTitles: string[] = [];
     this.artWorks.forEach((artWork: ArtWorksInterface) => {
       if (artWork.styleTitles?.length) {
-        styleTitles = [...styleTitles, ...artWork.styleTitles]
+        styleTitles = [...styleTitles, ...artWork.styleTitles];
       }
-    })
+    });
 
-    let keys: string[] = [];
-    let titleDictionary: any = {};
+    const titleDictionary: Record<string, number> = {};
+    const keys: string[] = [];
     styleTitles.forEach((title: string) => {
       if (keys.indexOf(title) >= 0) {
-        titleDictionary[title]++;
+        titleDictionary[title] = (titleDictionary[title] ?? 0) + 1;
       } else {
         titleDictionary[title] = 1;
         keys.push(title);
       }
-    })
+    });
 
     keys.forEach((key: string) => {
-      this.styleTitleOptions.push(
-        {
-          styleTitle: key,
-          numberOfItem: titleDictionary[key]
-        }
-      )
-    })
+      this.styleTitleOptions.push({
+        styleTitle: key,
+        numberOfItem: titleDictionary[key] ?? 0,
+      });
+    });
   }
 
   onStyleFilterChange(filterKeys: string[]) {
@@ -169,7 +162,7 @@ export class ArtWorkListComponent implements OnInit {
       this.isFilteredArtWorks = this.artWorks.filter((item: ArtWorksInterface) => {
         const arr = filterKeys.filter(x => item.styleTitles?.includes(x));
         return arr.length > 0;
-      })
+      });
     }
   }
 
