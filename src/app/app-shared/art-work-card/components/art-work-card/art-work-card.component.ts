@@ -2,12 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ArtWorksInterface } from "../../../../app-art-work/interfaces/art-works.interface";
 import { ArtWorkCardService } from "../../services/art-work-card.service";
 import { environment } from "@environment";
+import { MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 
 @Component({
     selector: 'art-work-card',
     templateUrl: './art-work-card.component.html',
     styleUrls: ['./art-work-card.component.scss'],
-    standalone: false
+    imports: [MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent]
 })
 export class ArtWorkCardComponent implements OnInit {
   @Input() artWork: ArtWorksInterface = {};

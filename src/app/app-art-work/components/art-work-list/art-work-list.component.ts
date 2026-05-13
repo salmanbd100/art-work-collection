@@ -2,14 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ArtWorkService } from "../../services/art-work.service";
 import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/art-works.interface";
 import { SortUtilityService } from "../../services/sort-utility.service";
-import { PageEvent } from "@angular/material/paginator";
-import { MatSelectChange } from "@angular/material/select";
+import { PageEvent, MatPaginator } from "@angular/material/paginator";
+import { MatSelectChange, MatSelect, MatOption } from "@angular/material/select";
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { ArtWorkCardComponent } from '../../../app-shared/art-work-card/components/art-work-card/art-work-card.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
     selector: 'app-art-work-list',
     templateUrl: './art-work-list.component.html',
     styleUrls: ['./art-work-list.component.scss'],
-    standalone: false
+    imports: [MatFormField, MatLabel, MatSelect, FormsModule, MatOption, ArtWorkCardComponent, MatPaginator, MatProgressSpinner]
 })
 export class ArtWorkListComponent implements OnInit {
 
