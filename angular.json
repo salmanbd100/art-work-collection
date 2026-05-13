@@ -74,10 +74,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "art-work-collection:build:production"
+              "buildTarget": "art-work-collection:build:production"
             },
             "development": {
-              "browserTarget": "art-work-collection:build:development"
+              "buildTarget": "art-work-collection:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -85,7 +85,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "art-work-collection:build"
+            "buildTarget": "art-work-collection:build"
           }
         },
         "test": {
