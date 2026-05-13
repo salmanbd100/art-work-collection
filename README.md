@@ -1,27 +1,68 @@
-# ArtWorkCollection
+# Art Work Collection
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.4.
+A modern Angular SPA that showcases artworks from the [Art Institute of Chicago](https://api.artic.edu) public API. Browse a paginated grid, filter by style, and sort by name, artist, or date.
 
-## Development server
+## Stack
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+| Layer           | Tech                               |
+| --------------- | ---------------------------------- |
+| Framework       | Angular 21                         |
+| UI Components   | Angular Material 21                |
+| HTTP            | Angular HttpClient (fetch backend) |
+| Language        | TypeScript 5.9                     |
+| Runtime         | Node 22 LTS                        |
+| Package manager | pnpm 9                             |
+| Reactive        | RxJS 7.8                           |
 
-## Code scaffolding
+## Scripts
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+| Command             | Description                        |
+| ------------------- | ---------------------------------- |
+| `pnpm start`        | Start dev server at localhost:4200 |
+| `pnpm build`        | Production build                   |
+| `pnpm test`         | Run unit tests                     |
+| `pnpm lint`         | Run ESLint                         |
+| `pnpm lint:fix`     | Run ESLint with auto-fix           |
+| `pnpm format`       | Format all files with Prettier     |
+| `pnpm format:check` | Check formatting                   |
+| `pnpm typecheck`    | TypeScript type check (no emit)    |
 
-## Build
+## Local development
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+# Requires Node 22 (use nvm)
+nvm use
 
-## Running unit tests
+pnpm install
+pnpm start
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Upgrade journey
 
-## Running end-to-end tests
+This project was modernized from Angular 13.2 to Angular 21, stepping through each major version:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+| Commit                                | From | To   |
+| ------------------------------------- | ---- | ---- |
+| `chore(deps): upgrade angular to v14` | 13.2 | 14.3 |
+| `chore(deps): upgrade angular to v15` | 14.3 | 15.2 |
+| `chore(deps): upgrade angular to v16` | 15.2 | 16.2 |
+| `chore(deps): upgrade angular to v17` | 16.2 | 17.3 |
+| `chore(deps): upgrade angular to v18` | 17.3 | 18.2 |
+| `chore(deps): upgrade angular to v19` | 18.2 | 19.2 |
+| `chore(deps): upgrade angular to v20` | 19.2 | 20.3 |
+| `chore(deps): upgrade angular to v21` | 20.3 | 21.2 |
 
-## Further help
+Notable changes per major:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **v14**: Typed reactive forms, standalone components (developer preview)
+- **v15**: Standalone stable, `NgOptimizedImage`, functional router guards
+- **v16**: Signals preview, required `@Input()`, `takeUntilDestroyed`, esbuild dev server
+- **v17**: Stable signals, new `@if`/`@for`/`@switch` control flow, deferrable views, application builder default
+- **v18**: Zoneless change detection preview, Material 3, event replay hydration
+- **v19**: Standalone default (`standalone: false` now explicit), `resource()`/`rxResource()` preview
+- **v20**: Resource/linked signal APIs stable, Material 3 polish
+- **v21**: Latest — polish, stricter DI types, `lib` target bumped to ES2022
+
+## Architecture
+
+Architecture diagram and ADRs coming on Day 5.

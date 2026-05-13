@@ -1,85 +1,110 @@
-import { Component, OnInit } from '@angular/core';
-import { ArtWorkService } from "../../services/art-work.service";
-import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/art-works.interface";
-import { SortUtilityService } from "../../services/sort-utility.service";
+import { Component, OnInit, inject } from '@angular/core';
+import { ArtWorkService } from '../../services/art-work.service';
+import {
+  ArtWorksInterface,
+  SelectTitleOptionInterface,
+} from '../../interfaces/art-works.interface';
+import { SortUtilityService } from '../../services/sort-utility.service';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { ArtWorkCardComponent } from '../../../app-shared/art-work-card/components/art-work-card/art-work-card.component';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-art-work-list',
   templateUrl: './art-work-list.component.html',
-  styleUrls: ['./art-work-list.component.scss']
+  styleUrls: ['./art-work-list.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    ArtWorkCardComponent,
+    MatPaginator,
+    MatProgressSpinner,
+  ],
 })
 export class ArtWorkListComponent implements OnInit {
+  private artWorkService = inject(ArtWorkService);
+  private sortUtilityService = inject(SortUtilityService);
 
   artWorks: ArtWorksInterface[] = [];
-  isDataLoading: boolean = false;
+  isDataLoading = false;
 
-  // Image root url
-  iiifUrl: string = '';
+  iiifUrl = '';
 
-  // Sort
-  sortBy: string = '';
+  sortBy = '';
   sortOptions = ['Name', 'Artist', 'Date'];
 
-  // Filter
-  modelWithFilter: any[] = [];
+  modelWithFilter: string[] = [];
   styleTitleOptions: SelectTitleOptionInterface[] = [];
-  isFilter: boolean = false;
+  isFilter = false;
   isFilteredArtWorks: ArtWorksInterface[] = [];
 
-  // pagination variable
-  count: number = 210;
-  page: number = 1;
-  perPage: number = 8;
-
-  constructor(private artWorkService: ArtWorkService,
-              private sortUtilityService: SortUtilityService) {
-  }
+  count = 210;
+  page = 1;
+  perPage = 8;
 
   ngOnInit(): void {
     this.getArtWorkList();
   }
 
-  private _formatArtWorkData(artWorkData: any) {
-    artWorkData.forEach((artData: any) => {
-      this.artWorks.push({
-        id: artData.id,
-        imageId: artData?.image_id,
-        name: artData.title,
-        artist: artData.artist_title,
-        location: artData.place_of_origin,
-        startDate: artData.date_start,
-        endDate: artData.date_end,
-        materials: artData.material_titles,
-        styleTitles: artData.style_titles,
-      })
-    })
+  private _formatArtWorkData(
+    rawData: {
+      id: string;
+      image_id: string | null;
+      title: string | null;
+      artist_title: string | null;
+      place_of_origin: string | null;
+      date_start: string | null;
+      date_end: string | null;
+      material_titles: string[] | null;
+      style_titles: string[] | null;
+    }[],
+  ) {
+    rawData.forEach((artData) => {
+      const item: ArtWorksInterface = { id: artData.id };
+      if (artData.image_id !== null) item.imageId = artData.image_id;
+      if (artData.title !== null) item.name = artData.title;
+      if (artData.artist_title !== null) item.artist = artData.artist_title;
+      if (artData.place_of_origin !== null) item.location = artData.place_of_origin;
+      if (artData.date_start !== null) item.startDate = artData.date_start;
+      if (artData.date_end !== null) item.endDate = artData.date_end;
+      if (artData.material_titles !== null) item.materials = artData.material_titles;
+      if (artData.style_titles !== null) item.styleTitles = artData.style_titles;
+      this.artWorks.push(item);
+    });
   }
 
   private _sortArtWorkerData() {
     if (this.sortBy === 'ARTIST') {
-      this.artWorks.sort(this.sortUtilityService.SortByArtist)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByArtist(a, b));
     }
     if (this.sortBy === 'NAME') {
-      this.artWorks.sort(this.sortUtilityService.SortByName)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByName(a, b));
     }
     if (this.sortBy === 'DATE') {
-      this.artWorks.sort(this.sortUtilityService.SortByDate)
+      this.artWorks.sort((a, b) => this.sortUtilityService.SortByDate(a, b));
     }
   }
 
   getArtWorkList() {
     this.isDataLoading = true;
     const query = {
-      fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id,style_titles',
+      fields:
+        'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id,style_titles',
       page: this.page,
       limit: this.perPage,
-    }
-    this.artWorkService.GetArtWorkList(query).subscribe((response: any) => {
+    };
+    this.artWorkService.GetArtWorkList(query).subscribe((response) => {
       if (response?.data?.length) {
-        this.count = response?.pagination?.total;
-        this.page = response?.pagination?.current_page;
-        this.perPage = response?.pagination?.limit;
-        this.iiifUrl = response?.config?.iiif_url;
+        this.count = response.pagination.total;
+        this.page = response.pagination.current_page;
+        this.perPage = response.pagination.limit;
+        this.iiifUrl = response.config.iiif_url;
         this.artWorks = [];
         this._formatArtWorkData(response.data);
         this._formatStyleTitleFilter();
@@ -88,7 +113,7 @@ export class ArtWorkListComponent implements OnInit {
         }
         this.isDataLoading = false;
       }
-    })
+    });
   }
 
   private _clearStyleFilter() {
@@ -96,7 +121,6 @@ export class ArtWorkListComponent implements OnInit {
     this.isFilter = false;
     this.styleTitleOptions = [];
   }
-
 
   prevPage() {
     this.page--;
@@ -116,42 +140,39 @@ export class ArtWorkListComponent implements OnInit {
     this._clearStyleFilter();
   }
 
+  onPageChange(event: PageEvent) {
+    this.page = event.pageIndex + 1;
+    this.perPage = event.pageSize;
+    this.getArtWorkList();
+    this._clearStyleFilter();
+  }
+
   private _formatStyleTitleFilter() {
     this.styleTitleOptions = [];
-    let styleTitles: string[] = []
+    let styleTitles: string[] = [];
     this.artWorks.forEach((artWork: ArtWorksInterface) => {
       if (artWork.styleTitles?.length) {
-        styleTitles = [...styleTitles, ...artWork.styleTitles]
+        styleTitles = [...styleTitles, ...artWork.styleTitles];
       }
-    })
+    });
 
-    let keys: string[] = [];
-    let titleDictionary: any = {};
+    const titleDictionary: Record<string, number> = {};
+    const keys: string[] = [];
     styleTitles.forEach((title: string) => {
       if (keys.indexOf(title) >= 0) {
-        titleDictionary[title]++;
+        titleDictionary[title] = (titleDictionary[title] ?? 0) + 1;
       } else {
         titleDictionary[title] = 1;
         keys.push(title);
       }
-    })
+    });
 
     keys.forEach((key: string) => {
-      this.styleTitleOptions.push(
-        {
-          styleTitle: key,
-          numberOfItem: titleDictionary[key]
-        }
-      )
-    })
-  }
-
-  selectLabel(option: SelectTitleOptionInterface): string {
-    return `${option.styleTitle} (${option.numberOfItem})`;
-  }
-
-  selectValue(option: SelectTitleOptionInterface): string {
-    return option.styleTitle;
+      this.styleTitleOptions.push({
+        styleTitle: key,
+        numberOfItem: titleDictionary[key] ?? 0,
+      });
+    });
   }
 
   onStyleFilterChange(filterKeys: string[]) {
@@ -162,16 +183,15 @@ export class ArtWorkListComponent implements OnInit {
     } else {
       this.isFilter = true;
       this.isFilteredArtWorks = this.artWorks.filter((item: ArtWorksInterface) => {
-        // @ts-ignore
-        const arr = filterKeys.filter(x => item.styleTitles.includes(x));
+        const arr = filterKeys.filter((x) => item.styleTitles?.includes(x));
         return arr.length > 0;
-      })
+      });
     }
   }
 
-  onChangeSortBy($event: any) {
+  onChangeSortBy(event: MatSelectChange) {
     this._clearStyleFilter();
-    this.sortBy = $event.value.toUpperCase();
+    this.sortBy = (event.value as string).toUpperCase();
     this._sortArtWorkerData();
   }
 }

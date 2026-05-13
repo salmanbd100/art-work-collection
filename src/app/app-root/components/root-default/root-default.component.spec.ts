@@ -8,9 +8,8 @@ describe('RootDefaultComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RootDefaultComponent ]
-    })
-    .compileComponents();
+      imports: [RootDefaultComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
