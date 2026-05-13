@@ -4,37 +4,45 @@
     <mat-form-field appearance="fill">
       <mat-label>Filter by Style</mat-label>
       <mat-select multiple [(ngModel)]="modelWithFilter" (ngModelChange)="onStyleFilterChange($event)">
-        <mat-option *ngFor="let option of styleTitleOptions" [value]="option.styleTitle">
-          {{ option.styleTitle }} ({{ option.numberOfItem }})
-        </mat-option>
+        @for (option of styleTitleOptions; track option) {
+          <mat-option [value]="option.styleTitle">
+            {{ option.styleTitle }} ({{ option.numberOfItem }})
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
       <mat-label>Sort by</mat-label>
       <mat-select (selectionChange)="onChangeSortBy($event)">
-        <mat-option *ngFor="let option of sortOptions" [value]="option">{{ option }}</mat-option>
+        @for (option of sortOptions; track option) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
 </div>
 
-<div class="artwork-grid" *ngIf="!isDataLoading && artWorks.length">
-  <ng-container *ngIf="!isFilter">
-    <art-work-card
-      *ngFor="let artWork of artWorks"
-      [artWork]="artWork"
-      [iiifUrl]="iiifUrl">
-    </art-work-card>
-  </ng-container>
-  <ng-container *ngIf="isFilter">
-    <art-work-card
-      *ngFor="let artWork of isFilteredArtWorks"
-      [artWork]="artWork"
-      [iiifUrl]="iiifUrl">
-    </art-work-card>
-  </ng-container>
-</div>
+@if (!isDataLoading && artWorks.length) {
+  <div class="artwork-grid">
+    @if (!isFilter) {
+      @for (artWork of artWorks; track artWork) {
+        <art-work-card
+          [artWork]="artWork"
+          [iiifUrl]="iiifUrl">
+        </art-work-card>
+      }
+    }
+    @if (isFilter) {
+      @for (artWork of isFilteredArtWorks; track artWork) {
+        <art-work-card
+          [artWork]="artWork"
+          [iiifUrl]="iiifUrl">
+        </art-work-card>
+      }
+    }
+  </div>
+}
 
 <div class="pagination-wrapper">
   <mat-paginator
@@ -46,6 +54,8 @@
   </mat-paginator>
 </div>
 
-<div class="spinner-wrapper" *ngIf="isDataLoading">
-  <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
-</div>
+@if (isDataLoading) {
+  <div class="spinner-wrapper">
+    <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+  </div>
+}
