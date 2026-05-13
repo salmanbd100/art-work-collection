@@ -1,17 +1,35 @@
-<mat-card class="single-art-work">
-  <img
-    mat-card-image
-    class="art-work-image"
-    [src]="imageUrl()"
-    (error)="$event.target.src = defaultImageUrl"
-    [alt]="artWork().title"
-  />
-  <mat-card-header>
-    <mat-card-title>{{ artWork().title }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p class="subtitle">{{ artWork().artist }}</p>
-    <p class="subtitle">{{ location() }}</p>
-    <p class="subtitle">{{ artWork().materials.join(', ') }}</p>
-  </mat-card-content>
-</mat-card>
+<a
+  [routerLink]="['/artworks', artWork().id]"
+  class="card-link"
+  [attr.aria-label]="'View ' + artWork().title + ' by ' + artWork().artist"
+>
+  <mat-card class="single-art-work">
+    <img
+      [ngSrc]="imageUrl()"
+      class="art-work-image"
+      [alt]="artWork().title"
+      [style.view-transition-name]="'artwork-image-' + artWork().id"
+      [priority]="priority()"
+      width="300"
+      height="200"
+    />
+    <button
+      mat-icon-button
+      class="fav-btn"
+      [class.favorited]="isFavorited()"
+      [attr.aria-pressed]="isFavorited()"
+      [attr.aria-label]="(isFavorited() ? 'Remove ' : 'Add ') + artWork().title + ' from favorites'"
+      (click)="onFavoriteToggle($event)"
+    >
+      <mat-icon>{{ isFavorited() ? 'favorite' : 'favorite_border' }}</mat-icon>
+    </button>
+    <mat-card-header>
+      <mat-card-title>{{ artWork().title }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="subtitle">{{ artWork().artist }}</p>
+      <p class="subtitle">{{ location() }}</p>
+      <p class="subtitle">{{ artWork().materials.join(', ') }}</p>
+    </mat-card-content>
+  </mat-card>
+</a>

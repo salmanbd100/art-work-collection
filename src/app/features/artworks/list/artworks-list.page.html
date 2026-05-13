@@ -1,5 +1,8 @@
 <div class="top-header">
   <h1 class="main-title">Art Collection</h1>
+  <div class="search-row">
+    <app-search-input (searched)="onSearch($event)"></app-search-input>
+  </div>
   <div class="controls-row">
     <mat-form-field appearance="fill">
       <mat-label>Filter by Style</mat-label>
@@ -27,10 +30,20 @@
   </div>
 </div>
 
-@if (!store.isLoading() && store.filteredArtworks().length) {
+@if (store.error()) {
+<app-error-state (retry)="store.retry()"></app-error-state>
+} @else if (store.isLoading()) {
 <div class="artwork-grid">
-  @for (artWork of store.filteredArtworks(); track artWork.id) {
-  <app-art-work-card [artWork]="artWork" [iiifUrl]="store.iiifUrl()"></app-art-work-card>
+  @for (item of skeletonItems; track $index) {
+  <app-skeleton-card></app-skeleton-card>
+  }
+</div>
+} @else if (store.filteredArtworks().length === 0) {
+<app-empty-state [query]="store.query()" (cleared)="onSearch('')"></app-empty-state>
+} @else {
+<div class="artwork-grid">
+  @for (artWork of store.filteredArtworks(); track artWork.id; let i = $index) {
+  <app-art-work-card [artWork]="artWork" [priority]="i < 4"></app-art-work-card>
   }
 </div>
 }
@@ -44,9 +57,3 @@
     (page)="onPageChange($event)"
   ></mat-paginator>
 </div>
-
-@if (store.isLoading()) {
-<div class="spinner-wrapper">
-  <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
-</div>
-}

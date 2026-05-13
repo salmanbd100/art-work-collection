@@ -1,0 +1,43 @@
+<div class="detail-page">
+  <a routerLink="/" class="back-link" mat-button> ← Back to collection </a>
+
+  @if (detailResource.isLoading()) {
+  <div class="spinner-wrapper">
+    <mat-progress-spinner mode="indeterminate" diameter="60"></mat-progress-spinner>
+  </div>
+  } @if (detailResource.error()) {
+  <div class="error-wrapper">
+    <p>
+      Failed to load artwork. <button mat-button (click)="detailResource.reload()">Retry</button>
+    </p>
+  </div>
+  } @if (artwork(); as art) {
+  <div class="detail-container">
+    <img
+      class="detail-image"
+      [src]="imageUrl()"
+      [alt]="art.title"
+      [style.view-transition-name]="'artwork-image-' + art.id"
+      (error)="onImageError($event)"
+      loading="lazy"
+      width="843"
+      height="562"
+    />
+    <div class="detail-info">
+      <h1 class="detail-title">{{ art.title }}</h1>
+      <p class="detail-meta">{{ art.artist }}</p>
+      @if (art.location) {
+      <p class="detail-meta">{{ art.location }}</p>
+      } @if (art.materials.length) {
+      <p class="detail-meta detail-materials">{{ art.materials.join(', ') }}</p>
+      } @if (art.styleTitles.length) {
+      <div class="style-chips">
+        @for (style of art.styleTitles; track style) {
+        <span class="style-chip">{{ style }}</span>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>

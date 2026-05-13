@@ -1,7 +1,7 @@
 import { ArtworkDto, ArtworkListResponseDto } from './artworks.dto';
 import { Artwork, Page } from './artworks.types';
 
-export function toArtwork(dto: ArtworkDto): Artwork {
+export function toArtwork(dto: ArtworkDto, iiifUrl = ''): Artwork {
   return {
     id: dto.id,
     imageId: dto.image_id,
@@ -12,17 +12,19 @@ export function toArtwork(dto: ArtworkDto): Artwork {
     endDate: dto.date_end,
     materials: dto.material_titles ?? [],
     styleTitles: dto.style_titles ?? [],
+    iiifUrl,
   };
 }
 
 export function toPage(response: ArtworkListResponseDto): Page<Artwork> {
+  const iiifUrl = response.config.iiif_url;
   return {
-    items: response.data.map(toArtwork),
+    items: response.data.map((dto) => toArtwork(dto, iiifUrl)),
     total: response.pagination.total,
     currentPage: response.pagination.current_page,
     perPage: response.pagination.limit,
     totalPages: response.pagination.total_pages,
-    iiifUrl: response.config.iiif_url,
+    iiifUrl,
   };
 }
 

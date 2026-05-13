@@ -10,6 +10,7 @@ export interface Artwork {
   endDate: number | null;
   materials: string[];
   styleTitles: string[];
+  iiifUrl: string;
 }
 
 export interface Page<T> {

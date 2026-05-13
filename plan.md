@@ -213,7 +213,9 @@ GLOBAL RULES (apply to every step)
 
 **Theme:** Show that you think about architecture, not just features. Today is the day a senior reviewer says "okay, this person has done this before."
 
-### Outcomes
+### Outcomes ✅
+
+> **What actually shipped (2026-05-13):** Folder layout created (`core/`, `data/`, `features/`, `shared/`). DTO/domain split: `artworks.dto.ts`, `artworks.types.ts`, `artworks.mapper.ts` (with `formatLocation` bug fixed), `artworks.mapper.spec.ts`, `artworks.api.ts`. Three functional HTTP interceptors (base-url, error, loading) + `loading.signal.ts` wired into `app.config.ts`. Signal-based `ArtworksStore` using `rxResource` (note: Angular 21 uses `params`/`stream` not `request`/`loader`). `ArtworksListPage` and `ArtWorkCardComponent` rewritten as OnPush presentational shells with signal inputs — zero `subscribe()`, zero `any`. Old services/interfaces/components deleted. `pnpm build` clean; grep confirms 0 subscribes, 0 anys.
 
 - Folder structure reshaped into `core/`, `shared/`, `data/`, `features/` (see top of plan).
 - **DTO / domain split:** `data/artworks/artworks.dto.ts` mirrors the AIC API exactly. `data/artworks/artworks.types.ts` defines the domain `Artwork` and `Pagination`. `artworks.mapper.ts` translates DTO → domain and is the _only_ place that knows about `image_id`, `style_titles`, `iiif_url`, etc.
@@ -485,6 +487,7 @@ Rules:
 ## Working agreement (applies every day)
 
 - One commit per numbered step. Conventional Commits (`feat:`, `refactor:`, `chore:`, etc.).
+- **Before every commit: show the proposed commit message and ask for permission. Do not commit automatically.**
 - Don't move on while the build is red.
 - If a step turns out to be wrong, write a one-line note at the bottom of `plan.md` and adjust the next day's prompt before you start it.
 - At the end of each day, update the relevant `Outcomes` block in this file with a ✅ and a one-line "what actually shipped" note. This becomes a session log that's useful for the README on Day 5.

@@ -1,0 +1,19 @@
+<div class="favorites-page">
+  <header class="page-header">
+    <h1>Your Favorites</h1>
+    <a routerLink="/" mat-button>← Back to collection</a>
+  </header>
+
+  @if (store.favorites().length === 0) {
+  <div class="empty-state">
+    <p class="empty-message">You haven't saved any artworks yet.</p>
+    <a routerLink="/" mat-flat-button color="primary">Browse the collection</a>
+  </div>
+  } @else {
+  <div class="artwork-grid">
+    @for (art of store.favorites(); track art.id) {
+    <app-art-work-card [artWork]="art"></app-art-work-card>
+    }
+  </div>
+  }
+</div>

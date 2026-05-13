@@ -1,14 +1,13 @@
-import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 import { Artwork } from '../../data/artworks/artworks.types';
 import { formatLocation } from '../../data/artworks/artworks.mapper';
+import { FavoritesStore } from '../../features/artworks/state/favorites.store';
 import { environment } from '@environment';
-import {
-  MatCard,
-  MatCardImage,
-  MatCardHeader,
-  MatCardTitle,
-  MatCardContent,
-} from '@angular/material/card';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-art-work-card',
@@ -16,19 +15,38 @@ import {
   styleUrls: ['./art-work-card.component.scss'],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent],
+  imports: [
+    RouterLink,
+    NgOptimizedImage,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatIconButton,
+    MatIcon,
+  ],
 })
 export class ArtWorkCardComponent {
   readonly artWork = input.required<Artwork>();
-  readonly iiifUrl = input.required<string>();
+  readonly priority = input(false);
+
+  private readonly favoritesStore = inject(FavoritesStore);
+
+  readonly isFavorited = computed(() => this.favoritesStore.has(this.artWork().id));
 
   readonly imageUrl = computed(() => {
-    const id = this.artWork().imageId;
-    if (!id) return environment.defaultImageUrl;
-    return `${this.iiifUrl()}/${id}/full/300,/0/default.jpg`;
+    const art = this.artWork();
+    if (!art.imageId) return environment.defaultImageUrl;
+    return `${art.iiifUrl}/${art.imageId}/full/300,/0/default.jpg`;
   });
 
   readonly location = computed(() => formatLocation(this.artWork()));
 
   protected defaultImageUrl = environment.defaultImageUrl;
+
+  onFavoriteToggle(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.favoritesStore.toggle(this.artWork());
+  }
 }

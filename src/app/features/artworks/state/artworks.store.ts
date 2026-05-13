@@ -1,5 +1,6 @@
 import { Injectable, computed, signal, inject } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 import { ArtworksApi } from '../../../data/artworks/artworks.api';
 import { Artwork, ArtworkSort } from '../../../data/artworks/artworks.types';
 
@@ -38,14 +39,21 @@ export class ArtworksStore {
   readonly page = signal(1);
   readonly perPage = signal(8);
 
+  readonly debouncedQuery = toSignal(toObservable(this.query).pipe(debounceTime(300)), {
+    initialValue: '',
+  });
+
   private artworksResource = rxResource({
-    params: () => ({ page: this.page(), perPage: this.perPage() }),
+    params: () => ({
+      page: this.page(),
+      perPage: this.perPage(),
+      query: this.debouncedQuery() ?? '',
+    }),
     stream: ({ params }) => this.api.list(params),
   });
 
   readonly isLoading = this.artworksResource.isLoading;
   readonly error = this.artworksResource.error;
-  readonly iiifUrl = computed(() => this.artworksResource.value()?.iiifUrl ?? '');
   readonly totalCount = computed(() => this.artworksResource.value()?.total ?? 0);
   readonly totalPages = computed(() => this.artworksResource.value()?.totalPages ?? 0);
 
@@ -56,6 +64,11 @@ export class ArtworksStore {
   );
 
   readonly styleFacets = computed(() => computeStyleFacets(this.rawArtworks()));
+
+  setQuery(q: string): void {
+    this.query.set(q);
+    this.page.set(1);
+  }
 
   setSort(sort: ArtworkSort | null): void {
     this.sort.set(sort);
@@ -80,6 +93,13 @@ export class ArtworksStore {
     this.perPage.set(perPage);
     this.page.set(1);
     this.clearStyles();
+  }
+
+  syncFromUrl(p: { q: string; sort: ArtworkSort | null; styles: string[]; page: number }): void {
+    this.query.set(p.q);
+    this.sort.set(p.sort);
+    this.styleFilters.set(p.styles);
+    this.page.set(p.page);
   }
 
   retry(): void {

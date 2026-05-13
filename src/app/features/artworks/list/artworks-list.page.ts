@@ -4,10 +4,14 @@ import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ArtworksStore } from '../state/artworks.store';
 import { ArtWorkCardComponent } from '../../../shared/art-work-card/art-work-card.component';
 import { ArtworkSort } from '../../../data/artworks/artworks.types';
+import { SearchInputComponent } from './search-input.component';
+import { SkeletonCardComponent } from './skeleton-card.component';
+import { EmptyStateComponent } from './empty-state.component';
+import { ErrorStateComponent } from './error-state.component';
+import { useUrlSync } from '../../../core/url-sync';
 
 @Component({
   selector: 'app-artworks-list',
@@ -23,14 +27,26 @@ import { ArtworkSort } from '../../../data/artworks/artworks.types';
     MatOption,
     ArtWorkCardComponent,
     MatPaginator,
-    MatProgressSpinner,
     TitleCasePipe,
+    SearchInputComponent,
+    SkeletonCardComponent,
+    EmptyStateComponent,
+    ErrorStateComponent,
   ],
 })
 export class ArtworksListPage {
   protected store = inject(ArtworksStore);
   protected sortOptions: ArtworkSort[] = ['name', 'artist', 'date'];
   protected selectedStyles: string[] = [];
+  protected readonly skeletonItems = Array.from({ length: 8 });
+
+  constructor() {
+    useUrlSync();
+  }
+
+  onSearch(q: string): void {
+    this.store.setQuery(q);
+  }
 
   onPageChange(event: PageEvent): void {
     this.store.setPage(event.pageIndex + 1);

@@ -13,6 +13,16 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/artworks/list/artworks-list.page').then((m) => m.ArtworksListPage),
       },
+      {
+        path: 'artworks/:id',
+        loadComponent: () =>
+          import('./features/artworks/detail/artwork-detail.page').then((m) => m.ArtworkDetailPage),
+      },
+      {
+        path: 'favorites',
+        loadComponent: () =>
+          import('./features/artworks/favorites/favorites.page').then((m) => m.FavoritesPage),
+      },
     ],
   },
 ];

@@ -1,6 +1,13 @@
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .single-art-work {
   width: 100%;
   min-height: 400px;
+  position: relative;
 
   .art-work-image {
     width: 100%;
@@ -12,4 +19,15 @@
   .subtitle {
     margin: 5px;
   }
+}
+
+.fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+}
+
+.fav-btn.favorited {
+  color: #e53935;
 }

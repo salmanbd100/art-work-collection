@@ -24,3 +24,10 @@ export interface ArtworkListResponseDto {
     iiif_url: string;
   };
 }
+
+export interface ArtworkSingleResponseDto {
+  data: ArtworkDto;
+  config: {
+    iiif_url: string;
+  };
+}
