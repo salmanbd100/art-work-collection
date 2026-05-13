@@ -1,25 +1,29 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ArtWorksInterface } from "../../../../app-art-work/interfaces/art-works.interface";
-import { ArtWorkCardService } from "../../services/art-work-card.service";
-import { environment } from "@environment";
-import { MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
+import { Component, OnInit, Input, inject } from '@angular/core';
+import { ArtWorksInterface } from '../../../../app-art-work/interfaces/art-works.interface';
+import { ArtWorkCardService } from '../../services/art-work-card.service';
+import { environment } from '@environment';
+import {
+  MatCard,
+  MatCardImage,
+  MatCardHeader,
+  MatCardTitle,
+  MatCardContent,
+} from '@angular/material/card';
 
 @Component({
-    selector: 'art-work-card',
-    templateUrl: './art-work-card.component.html',
-    styleUrls: ['./art-work-card.component.scss'],
-    imports: [MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent]
+  selector: 'app-art-work-card',
+  templateUrl: './art-work-card.component.html',
+  styleUrls: ['./art-work-card.component.scss'],
+  imports: [MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent],
 })
 export class ArtWorkCardComponent implements OnInit {
+  private artWorkCardService = inject(ArtWorkCardService);
+
   @Input() artWork: ArtWorksInterface = {};
-  @Input() iiifUrl: string = '';
+  @Input() iiifUrl = '';
 
-  imageUrl: string = '';
-
+  imageUrl = '';
   artWorkLocation: string | undefined = '';
-
-  constructor(private artWorkCardService: ArtWorkCardService) {
-  }
 
   ngOnInit(): void {
     this._formatArtWorkLocation();
@@ -35,20 +39,16 @@ export class ArtWorkCardComponent implements OnInit {
       this.artWorkLocation = `${this.artWork.location} (${this.artWork.startDate})`;
       return;
     }
-    if (this.artWork.startDate === this.artWork.endDate) {
-      this.artWorkLocation = `${this.artWork.location} (${this.artWork.startDate} - ${this.artWork.endDate})`;
-      return;
-    }
+    this.artWorkLocation = `${this.artWork.location} (${this.artWork.startDate} - ${this.artWork.endDate})`;
   }
 
   _getArtWorkImageUrl() {
-    const orginalImageUrl = `${this.iiifUrl}/${this.artWork.imageId}/full/300,/0/default.jpg`
-
-    const isExistImage = this.artWorkCardService.IsExistArtWorkImage(orginalImageUrl);
-    this.imageUrl = isExistImage ? orginalImageUrl: environment.defaultImageUrl;
+    const originalImageUrl = `${this.iiifUrl}/${this.artWork.imageId}/full/300,/0/default.jpg`;
+    const isExistImage = this.artWorkCardService.IsExistArtWorkImage(originalImageUrl);
+    this.imageUrl = isExistImage ? originalImageUrl : environment.defaultImageUrl;
   }
 
-  onImageLoadError($event: ErrorEvent) {
+  onImageLoadError() {
     this.imageUrl = environment.defaultImageUrl;
   }
 }

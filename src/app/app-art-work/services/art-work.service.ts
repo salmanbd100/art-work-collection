@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { environment } from "@environment";
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@environment';
 
 interface ArtWorkListParams {
   fields: string;
@@ -33,12 +33,10 @@ interface ArtWorkListResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ArtWorkService {
-
-  constructor(private httpClient: HttpClient) {
-  }
+  private httpClient = inject(HttpClient);
 
   GetArtWorkList(params: ArtWorkListParams) {
     const url = environment.artWork + '/artworks';

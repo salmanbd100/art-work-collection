@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ArtWorksInterface } from "../interfaces/art-works.interface";
+import { ArtWorksInterface } from '../interfaces/art-works.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SortUtilityService {
-
   SortByArtist(a: ArtWorksInterface, b: ArtWorksInterface): number {
     const aVal = a.artist?.toLowerCase() ?? '';
     const bVal = b.artist?.toLowerCase() ?? '';

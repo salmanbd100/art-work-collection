@@ -1,5 +1,11 @@
 <mat-card class="single-art-work">
-  <img mat-card-image class="art-work-image" [src]="imageUrl" (error)="onImageLoadError($event)" [alt]="artWork.name || ''">
+  <img
+    mat-card-image
+    class="art-work-image"
+    [src]="imageUrl"
+    (error)="onImageLoadError()"
+    [alt]="artWork.name || ''"
+  />
   <mat-card-header>
     <mat-card-title>{{ artWork.name }}</mat-card-title>
   </mat-card-header>

@@ -1,48 +1,70 @@
-import { Component, OnInit } from '@angular/core';
-import { ArtWorkService } from "../../services/art-work.service";
-import { ArtWorksInterface, SelectTitleOptionInterface } from "../../interfaces/art-works.interface";
-import { SortUtilityService } from "../../services/sort-utility.service";
-import { PageEvent, MatPaginator } from "@angular/material/paginator";
-import { MatSelectChange, MatSelect, MatOption } from "@angular/material/select";
+import { Component, OnInit, inject } from '@angular/core';
+import { ArtWorkService } from '../../services/art-work.service';
+import {
+  ArtWorksInterface,
+  SelectTitleOptionInterface,
+} from '../../interfaces/art-works.interface';
+import { SortUtilityService } from '../../services/sort-utility.service';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
+import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { ArtWorkCardComponent } from '../../../app-shared/art-work-card/components/art-work-card/art-work-card.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
-    selector: 'app-art-work-list',
-    templateUrl: './art-work-list.component.html',
-    styleUrls: ['./art-work-list.component.scss'],
-    imports: [MatFormField, MatLabel, MatSelect, FormsModule, MatOption, ArtWorkCardComponent, MatPaginator, MatProgressSpinner]
+  selector: 'app-art-work-list',
+  templateUrl: './art-work-list.component.html',
+  styleUrls: ['./art-work-list.component.scss'],
+  imports: [
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    FormsModule,
+    MatOption,
+    ArtWorkCardComponent,
+    MatPaginator,
+    MatProgressSpinner,
+  ],
 })
 export class ArtWorkListComponent implements OnInit {
+  private artWorkService = inject(ArtWorkService);
+  private sortUtilityService = inject(SortUtilityService);
 
   artWorks: ArtWorksInterface[] = [];
-  isDataLoading: boolean = false;
+  isDataLoading = false;
 
-  iiifUrl: string = '';
+  iiifUrl = '';
 
-  sortBy: string = '';
+  sortBy = '';
   sortOptions = ['Name', 'Artist', 'Date'];
 
   modelWithFilter: string[] = [];
   styleTitleOptions: SelectTitleOptionInterface[] = [];
-  isFilter: boolean = false;
+  isFilter = false;
   isFilteredArtWorks: ArtWorksInterface[] = [];
 
-  count: number = 210;
-  page: number = 1;
-  perPage: number = 8;
-
-  constructor(private artWorkService: ArtWorkService,
-              private sortUtilityService: SortUtilityService) {
-  }
+  count = 210;
+  page = 1;
+  perPage = 8;
 
   ngOnInit(): void {
     this.getArtWorkList();
   }
 
-  private _formatArtWorkData(rawData: { id: string; image_id: string | null; title: string | null; artist_title: string | null; place_of_origin: string | null; date_start: string | null; date_end: string | null; material_titles: string[] | null; style_titles: string[] | null }[]) {
+  private _formatArtWorkData(
+    rawData: {
+      id: string;
+      image_id: string | null;
+      title: string | null;
+      artist_title: string | null;
+      place_of_origin: string | null;
+      date_start: string | null;
+      date_end: string | null;
+      material_titles: string[] | null;
+      style_titles: string[] | null;
+    }[],
+  ) {
     rawData.forEach((artData) => {
       const item: ArtWorksInterface = { id: artData.id };
       if (artData.image_id !== null) item.imageId = artData.image_id;
@@ -72,7 +94,8 @@ export class ArtWorkListComponent implements OnInit {
   getArtWorkList() {
     this.isDataLoading = true;
     const query = {
-      fields: 'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id,style_titles',
+      fields:
+        'id,title,artist_title,date_display,material_titles,date_start,date_end,place_of_origin,image_id,style_titles',
       page: this.page,
       limit: this.perPage,
     };
@@ -160,7 +183,7 @@ export class ArtWorkListComponent implements OnInit {
     } else {
       this.isFilter = true;
       this.isFilteredArtWorks = this.artWorks.filter((item: ArtWorksInterface) => {
-        const arr = filterKeys.filter(x => item.styleTitles?.includes(x));
+        const arr = filterKeys.filter((x) => item.styleTitles?.includes(x));
         return arr.length > 0;
       });
     }

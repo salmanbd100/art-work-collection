@@ -3,7 +3,11 @@
   <div class="controls-row">
     <mat-form-field appearance="fill">
       <mat-label>Filter by Style</mat-label>
-      <mat-select multiple [(ngModel)]="modelWithFilter" (ngModelChange)="onStyleFilterChange($event)">
+      <mat-select
+        multiple
+        [(ngModel)]="modelWithFilter"
+        (ngModelChange)="onStyleFilterChange($event)"
+      >
         @for (option of styleTitleOptions; track option) {
           <mat-option [value]="option.styleTitle">
             {{ option.styleTitle }} ({{ option.numberOfItem }})
@@ -27,18 +31,12 @@
   <div class="artwork-grid">
     @if (!isFilter) {
       @for (artWork of artWorks; track artWork) {
-        <art-work-card
-          [artWork]="artWork"
-          [iiifUrl]="iiifUrl">
-        </art-work-card>
+        <app-art-work-card [artWork]="artWork" [iiifUrl]="iiifUrl"> </app-art-work-card>
       }
     }
     @if (isFilter) {
       @for (artWork of isFilteredArtWorks; track artWork) {
-        <art-work-card
-          [artWork]="artWork"
-          [iiifUrl]="iiifUrl">
-        </art-work-card>
+        <app-art-work-card [artWork]="artWork" [iiifUrl]="iiifUrl"> </app-art-work-card>
       }
     }
   </div>
@@ -50,7 +48,8 @@
     [pageIndex]="page - 1"
     [pageSize]="perPage"
     [pageSizeOptions]="[8, 16, 24]"
-    (page)="onPageChange($event)">
+    (page)="onPageChange($event)"
+  >
   </mat-paginator>
 </div>
 
