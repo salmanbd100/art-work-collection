@@ -2,6 +2,8 @@
   [routerLink]="['/artworks', artWork().id]"
   class="card-link"
   [attr.aria-label]="'View ' + artWork().title + ' by ' + artWork().artist"
+  (mouseenter)="onLinkHoverOrFocus()"
+  (focusin)="onLinkHoverOrFocus()"
 >
   <mat-card class="single-art-work">
     <img

@@ -4,6 +4,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { Artwork } from '../../data/artworks/artworks.types';
 import { formatLocation } from '../../data/artworks/artworks.mapper';
 import { FavoritesStore } from '../../features/artworks/state/favorites.store';
+import { DetailPreloader } from '../../core/hover-preload.strategy';
 import { environment } from '@environment';
 import { MatCard, MatCardHeader, MatCardTitle, MatCardContent } from '@angular/material/card';
 import { MatIconButton } from '@angular/material/button';
@@ -31,6 +32,7 @@ export class ArtWorkCardComponent {
   readonly priority = input(false);
 
   private readonly favoritesStore = inject(FavoritesStore);
+  private readonly detailPreloader = inject(DetailPreloader);
 
   readonly isFavorited = computed(() => this.favoritesStore.has(this.artWork().id));
 
@@ -48,5 +50,9 @@ export class ArtWorkCardComponent {
     event.preventDefault();
     event.stopPropagation();
     this.favoritesStore.toggle(this.artWork());
+  }
+
+  onLinkHoverOrFocus(): void {
+    this.detailPreloader.preloadDetail();
   }
 }
