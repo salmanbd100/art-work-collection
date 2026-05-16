@@ -144,21 +144,21 @@ describe('ArtworksStore', () => {
     expect(store.styleFilters()).toEqual([]);
   });
 
-  it('should set page and clear styles via setPage', () => {
+  it('should set page without affecting styleFilters', () => {
     const store = TestBed.inject(ArtworksStore);
     store.toggleStyle('Impressionism');
     store.setPage(3);
     expect(store.page()).toBe(3);
-    expect(store.styleFilters()).toEqual([]);
+    expect(store.styleFilters()).toEqual(['Impressionism']);
   });
 
-  it('should set perPage, reset page to 1, and clear styles via setPerPage', () => {
+  it('should set perPage without resetting page or clearing styles', () => {
     const store = TestBed.inject(ArtworksStore);
     store.setPage(5);
     store.toggleStyle('Realism');
     store.setPerPage(16);
     expect(store.perPage()).toBe(16);
-    expect(store.page()).toBe(1);
-    expect(store.styleFilters()).toEqual([]);
+    expect(store.page()).toBe(5);
+    expect(store.styleFilters()).toEqual(['Realism']);
   });
 });
