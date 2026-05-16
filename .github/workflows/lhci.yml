@@ -1,4 +1,4 @@
-name: CI
+name: Lighthouse CI
 
 on:
   push:
@@ -7,9 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  lhci:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,22 +25,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
-      - name: Type check
-        run: pnpm typecheck
-
-      - name: Test with coverage
-        run: pnpm test:coverage
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: coverage-report
-          path: coverage/art-work-collection/
-          retention-days: 7
-
       - name: Build
         run: pnpm build
+
+      - name: Install http-server and Lighthouse CI
+        run: pnpm add -g @lhci/cli http-server
+
+      - name: Run Lighthouse CI
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
