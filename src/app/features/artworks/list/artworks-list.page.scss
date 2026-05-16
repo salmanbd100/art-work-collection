@@ -21,3 +21,13 @@
   justify-content: center;
   height: 50vh;
 }
+
+.virtual-scroll-viewport {
+  height: 75vh;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.dense-grid {
+  padding: 16px;
+}

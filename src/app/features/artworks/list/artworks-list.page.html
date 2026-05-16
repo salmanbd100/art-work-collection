@@ -2,7 +2,18 @@
   <div class="title-nav-row">
     <h1 class="main-title">Art Collection</h1>
     <nav aria-label="Site navigation">
-      <a routerLink="/favorites" mat-button aria-label="View your favorite artworks">Favorites</a>
+      <a [routerLink]="['/favorites']" mat-button aria-label="View your favorite artworks"
+        >Favorites</a
+      >
+      <a
+        [routerLink]="[]"
+        [queryParams]="{ dense: isDense() ? null : '1' }"
+        queryParamsHandling="merge"
+        mat-button
+        [attr.aria-pressed]="isDense()"
+        (click)="onToggleDense()"
+        >{{ isDense() ? 'Grid view' : 'Dense view' }}</a
+      >
     </nav>
   </div>
   <div class="search-row">
@@ -52,14 +63,25 @@
   </div>
   } @else if (store.filteredArtworks().length === 0) {
   <app-empty-state [query]="store.query()" (cleared)="onSearch('')"></app-empty-state>
+  } @else if (isDense()) {
+  <cdk-virtual-scroll-viewport
+    [itemSize]="denseItemHeight"
+    class="virtual-scroll-viewport"
+    aria-label="Artwork virtual scroll list"
+  >
+    <div class="artwork-grid dense-grid">
+      @for (artWork of store.filteredArtworks(); track artWork.id; let i = $index) {
+      <app-art-work-card [artWork]="artWork" [priority]="i < 4"></app-art-work-card>
+      }
+    </div>
+  </cdk-virtual-scroll-viewport>
   } @else {
   <div class="artwork-grid">
     @for (artWork of store.filteredArtworks(); track artWork.id; let i = $index) {
     <app-art-work-card [artWork]="artWork" [priority]="i < 4"></app-art-work-card>
     }
   </div>
-  }
-
+  } @if (!isDense()) {
   <div class="pagination-wrapper">
     <mat-paginator
       [length]="store.totalCount()"
@@ -70,4 +92,5 @@
       aria-label="Artwork pagination"
     ></mat-paginator>
   </div>
+  }
 </main>
