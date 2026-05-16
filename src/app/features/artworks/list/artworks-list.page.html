@@ -1,5 +1,10 @@
-<div class="top-header">
-  <h1 class="main-title">Art Collection</h1>
+<header class="top-header">
+  <div class="title-nav-row">
+    <h1 class="main-title">Art Collection</h1>
+    <nav aria-label="Site navigation">
+      <a routerLink="/favorites" mat-button aria-label="View your favorite artworks">Favorites</a>
+    </nav>
+  </div>
   <div class="search-row">
     <app-search-input [value]="store.query()" (searched)="onSearch($event)"></app-search-input>
   </div>
@@ -10,6 +15,7 @@
         multiple
         [ngModel]="store.styleFilters()"
         (ngModelChange)="onStyleFilterChange($event)"
+        aria-label="Filter artworks by style"
       >
         @for (facet of store.styleFacets(); track facet.styleTitle) {
         <mat-option [value]="facet.styleTitle">
@@ -21,7 +27,11 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Sort by</mat-label>
-      <mat-select [ngModel]="store.sort()" (selectionChange)="onChangeSortBy($event)">
+      <mat-select
+        [ngModel]="store.sort()"
+        (selectionChange)="onChangeSortBy($event)"
+        aria-label="Sort artworks"
+      >
         <mat-option [value]="null">None</mat-option>
         @for (option of sortOptions; track option) {
         <mat-option [value]="option">{{ option | titlecase }}</mat-option>
@@ -29,32 +39,35 @@
       </mat-select>
     </mat-form-field>
   </div>
-</div>
+</header>
 
-@if (store.error()) {
-<app-error-state (retry)="store.retry()"></app-error-state>
-} @else if (store.isLoading()) {
-<div class="artwork-grid">
-  @for (item of skeletonItems; track $index) {
-  <app-skeleton-card></app-skeleton-card>
+<main id="main-content" aria-label="Artwork gallery">
+  @if (store.error()) {
+  <app-error-state (retry)="store.retry()"></app-error-state>
+  } @else if (store.isLoading()) {
+  <div class="artwork-grid" aria-busy="true" aria-label="Loading artworks">
+    @for (item of skeletonItems; track $index) {
+    <app-skeleton-card></app-skeleton-card>
+    }
+  </div>
+  } @else if (store.filteredArtworks().length === 0) {
+  <app-empty-state [query]="store.query()" (cleared)="onSearch('')"></app-empty-state>
+  } @else {
+  <div class="artwork-grid">
+    @for (artWork of store.filteredArtworks(); track artWork.id; let i = $index) {
+    <app-art-work-card [artWork]="artWork" [priority]="i < 4"></app-art-work-card>
+    }
+  </div>
   }
-</div>
-} @else if (store.filteredArtworks().length === 0) {
-<app-empty-state [query]="store.query()" (cleared)="onSearch('')"></app-empty-state>
-} @else {
-<div class="artwork-grid">
-  @for (artWork of store.filteredArtworks(); track artWork.id; let i = $index) {
-  <app-art-work-card [artWork]="artWork" [priority]="i < 4"></app-art-work-card>
-  }
-</div>
-}
 
-<div class="pagination-wrapper">
-  <mat-paginator
-    [length]="store.totalCount()"
-    [pageIndex]="store.page() - 1"
-    [pageSize]="store.perPage()"
-    [pageSizeOptions]="[8, 16, 24]"
-    (page)="onPageChange($event)"
-  ></mat-paginator>
-</div>
+  <div class="pagination-wrapper">
+    <mat-paginator
+      [length]="store.totalCount()"
+      [pageIndex]="store.page() - 1"
+      [pageSize]="store.perPage()"
+      [pageSizeOptions]="[8, 16, 24]"
+      (page)="onPageChange($event)"
+      aria-label="Artwork pagination"
+    ></mat-paginator>
+  </div>
+</main>

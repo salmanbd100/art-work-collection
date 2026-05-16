@@ -1,8 +1,10 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatSelectChange, MatSelect, MatOption } from '@angular/material/select';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatButton } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { ArtworksStore } from '../state/artworks.store';
 import { ArtWorkCardComponent } from '../../../shared/art-work-card/art-work-card.component';
@@ -20,6 +22,8 @@ import { useUrlSync } from '../../../core/url-sync';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    RouterLink,
+    MatButton,
     MatFormField,
     MatLabel,
     MatSelect,
