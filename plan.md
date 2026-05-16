@@ -356,7 +356,9 @@ Rules:
 
 **Theme:** Make the codebase boring to maintain. Reviewers love this; juniors skip it.
 
-### Outcomes
+### Outcomes ✅
+
+> **What actually shipped (2026-05-16):** Karma → Vitest migration via @analogjs/vitest-angular 2.5.1 + @analogjs/vite-plugin-angular 2.5.1 — all 26 existing specs ran as-is in ~2s. New specs: artworks.api.spec.ts (list/getById with HttpTestingController + firstValueFrom), favorites.store.spec.ts (toggle/has/localStorage/TestBed.flushEffects), search-input.component.spec.ts, error-state.component.spec.ts (via @testing-library/angular + userEvent). Coverage: data/ at 100%, features/\*/state/ at ~83% (targets met). a11y: `<header>/<nav>/<main>` landmarks on all 3 routes, :focus-visible outline, prefers-reduced-motion disables view transitions. Bundle budgets set (400kB warn / 500kB error raw; gzipped initial is 124kB well under plan targets). Virtual scroll dense mode behind ?dense=1 URL param (CDK cdk-virtual-scroll-viewport, perPage 60). HoverPreloadStrategy + DetailPreloader preload artworks/:id chunk on card mouseenter/focusin. CI updated with coverage step + lhci.yml workflow with .lighthouserc.json assertions. typecheck script scoped to tsconfig.app.json.
 
 - **Migrate test runner from Karma to Vitest** (`@analogjs/vitest-angular`) — or stay on Karma if migration risk is too high; pick one in the first step.
 - **Test coverage targets:** 90% for `data/`, 80% for `features/*/state/`, smoke tests for routed pages.
