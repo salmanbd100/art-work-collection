@@ -37,7 +37,6 @@ import { useUrlSync } from '../../../core/url-sync';
 export class ArtworksListPage {
   protected store = inject(ArtworksStore);
   protected sortOptions: ArtworkSort[] = ['name', 'artist', 'date'];
-  protected selectedStyles: string[] = [];
   protected readonly skeletonItems = Array.from({ length: 8 });
 
   constructor() {
@@ -49,21 +48,18 @@ export class ArtworksListPage {
   }
 
   onPageChange(event: PageEvent): void {
-    this.store.setPage(event.pageIndex + 1);
     this.store.setPerPage(event.pageSize);
-    this.selectedStyles = [];
+    this.store.setPage(event.pageIndex + 1);
   }
 
   onStyleFilterChange(styles: string[]): void {
-    this.selectedStyles = styles;
     this.store.clearStyles();
     styles.forEach((s) => this.store.toggleStyle(s));
-    this.store.setSort(null);
+    this.store.setPage(1);
   }
 
   onChangeSortBy(event: MatSelectChange): void {
-    this.selectedStyles = [];
-    this.store.clearStyles();
-    this.store.setSort((event.value as string).toLowerCase() as ArtworkSort);
+    this.store.setSort(event.value as ArtworkSort | null);
+    this.store.setPage(1);
   }
 }

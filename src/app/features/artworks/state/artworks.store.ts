@@ -1,6 +1,5 @@
 import { Injectable, computed, signal, inject } from '@angular/core';
-import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ArtworksApi } from '../../../data/artworks/artworks.api';
 import { Artwork, ArtworkSort } from '../../../data/artworks/artworks.types';
 
@@ -39,15 +38,11 @@ export class ArtworksStore {
   readonly page = signal(1);
   readonly perPage = signal(8);
 
-  readonly debouncedQuery = toSignal(toObservable(this.query).pipe(debounceTime(300)), {
-    initialValue: '',
-  });
-
   private artworksResource = rxResource({
     params: () => ({
       page: this.page(),
       perPage: this.perPage(),
-      query: this.debouncedQuery() ?? '',
+      query: this.query(),
     }),
     stream: ({ params }) => this.api.list(params),
   });
@@ -86,13 +81,10 @@ export class ArtworksStore {
 
   setPage(page: number): void {
     this.page.set(page);
-    this.clearStyles();
   }
 
   setPerPage(perPage: number): void {
     this.perPage.set(perPage);
-    this.page.set(1);
-    this.clearStyles();
   }
 
   syncFromUrl(p: { q: string; sort: ArtworkSort | null; styles: string[]; page: number }): void {

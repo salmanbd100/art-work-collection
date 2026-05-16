@@ -297,6 +297,10 @@ Rules:
 
 **Theme:** Architecture without features is a museum piece. Today shows you can build things users actually want, on top of the structure from Day 2.
 
+### Outcomes ✅
+
+> **What actually shipped (2026-05-16):** URL sync (`core/url-sync.ts` + `store.syncFromUrl()`), debounced search (`SearchInputComponent` 300ms), `/artworks/:id` detail route with view-transition image cross-fade, `FavoritesStore` (localStorage persistence) + `/favorites` route, skeleton/empty/error states, `NgOptimizedImage` on cards. Follow-up commit fixed six bugs: double debounce removed (debounce lives in search component only), `selectedStyles` local array replaced with `store.styleFilters()` binding, search input now initializes from `[value]="store.query()"` via signal effect, `setPage`/`setPerPage` no longer clear styles, sort select bound to store via `[ngModel]="store.sort()"`, added "None" sort option to allow reset.
+
 ### Features to ship
 
 1. **URL-synced state.** Query string is the single source of truth: `?q=monet&sort=date&style=Impressionism&page=2`. Refresh keeps state; back/forward works. Use `Router` + `ActivatedRoute` + a small adapter in the store (`syncFromUrl()` / `effect` writes to URL).

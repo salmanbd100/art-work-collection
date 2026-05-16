@@ -3,9 +3,10 @@ import {
   ChangeDetectionStrategy,
   output,
   signal,
-  OnInit,
+  input,
   inject,
   DestroyRef,
+  effect,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -28,7 +29,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
         matInput
         [(ngModel)]="rawValue"
         (ngModelChange)="onInput($event)"
-        [attr.aria-label]="'Search artworks'"
+        aria-label="Search artworks"
       />
       @if (rawValue()) {
         <button mat-icon-button matSuffix (click)="clear()" aria-label="Clear search">
@@ -46,13 +47,20 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     `,
   ],
 })
-export class SearchInputComponent implements OnInit {
+export class SearchInputComponent {
+  readonly value = input('');
   readonly searched = output<string>();
+
   protected rawValue = signal('');
   private readonly input$ = new Subject<string>();
   private destroyRef = inject(DestroyRef);
 
-  ngOnInit(): void {
+  constructor() {
+    // Sync rawValue when the parent changes value (e.g. URL restore, external clear)
+    effect(() => {
+      this.rawValue.set(this.value());
+    });
+
     this.input$
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
       .subscribe((v) => this.searched.emit(v));

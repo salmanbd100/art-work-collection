@@ -1,14 +1,14 @@
 <div class="top-header">
   <h1 class="main-title">Art Collection</h1>
   <div class="search-row">
-    <app-search-input (searched)="onSearch($event)"></app-search-input>
+    <app-search-input [value]="store.query()" (searched)="onSearch($event)"></app-search-input>
   </div>
   <div class="controls-row">
     <mat-form-field appearance="fill">
       <mat-label>Filter by Style</mat-label>
       <mat-select
         multiple
-        [(ngModel)]="selectedStyles"
+        [ngModel]="store.styleFilters()"
         (ngModelChange)="onStyleFilterChange($event)"
       >
         @for (facet of store.styleFacets(); track facet.styleTitle) {
@@ -21,7 +21,8 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Sort by</mat-label>
-      <mat-select (selectionChange)="onChangeSortBy($event)">
+      <mat-select [ngModel]="store.sort()" (selectionChange)="onChangeSortBy($event)">
+        <mat-option [value]="null">None</mat-option>
         @for (option of sortOptions; track option) {
         <mat-option [value]="option">{{ option | titlecase }}</mat-option>
         }
