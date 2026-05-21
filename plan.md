@@ -424,7 +424,9 @@ Rules:
 
 **Theme:** Wrap a bow on it. By end of day a recruiter can open one link and get the whole story.
 
-### Outcomes
+### Outcomes ✅
+
+> **What actually shipped (2026-05-21):** SSR via `@angular/ssr` (Express + CommonEngine, `allowedHosts: ['localhost','127.0.0.1']`). `provideClientHydration(withEventReplay(), withHttpTransferCacheOptions(...))` in `app.config.ts` — initial artworks GET embedded as `<script id="ng-state">` (~5.8 KB) and reused on hydration; `view-source` shows the rendered grid with `ngh` markers. PWA via `@angular/pwa`: custom `ngsw-config.json` with app-shell prefetch + IIIF images (performance, 50/7d) + AIC API (freshness, 100/1h, 10s timeout); manifest themed `#005cbb`. Five ADRs in `docs/adr/` (signal store, standalone, DTO split, URL state, SSR+TransferState). README v2 with Mermaid diagram, stack table, ADR links, "what I'd do next". Final sweep green: lint clean, typecheck clean, 50 tests pass. Tagged `v1.0.0`. Storybook + Vercel deploy intentionally deferred — captured in "What I'd do next".
 
 - **Angular SSR + hydration** via `@angular/ssr`. First paint comes from the server, client hydrates without re-fetching the initial page (use `TransferState` for the first artworks page).
 - **PWA**: `@angular/pwa` schematic, manifest with name/icons/theme, service worker caches: app shell + 50 most recent IIIF images. Offline route shows favorites (already in localStorage).
