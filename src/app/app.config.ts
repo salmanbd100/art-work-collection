@@ -8,6 +8,11 @@ import { baseUrlInterceptor } from './core/http/base-url.interceptor';
 import { errorInterceptor } from './core/http/error.interceptor';
 import { loadingInterceptor } from './core/http/loading.interceptor';
 import { HoverPreloadStrategy } from './core/hover-preload.strategy';
+import {
+  provideClientHydration,
+  withEventReplay,
+  withHttpTransferCacheOptions,
+} from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,5 +23,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideAnimationsAsync(),
     { provide: IMAGE_LOADER, useValue: (config: ImageLoaderConfig) => config.src },
+    provideClientHydration(
+      withEventReplay(),
+      withHttpTransferCacheOptions({ includePostRequests: false }),
+    ),
   ],
 };
